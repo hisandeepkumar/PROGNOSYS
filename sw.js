@@ -2,7 +2,7 @@ const CACHE_NAME = "prognosys-cache-v2";
 const urlsToCache = [
   "/",
   "/index.html",    
-  "/images/background.png",
+  "/images/logo.png",
   "/app.js",        
   "/icon-192.png",
   "/icon-512.png"
