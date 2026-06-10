@@ -1,0 +1,480 @@
+
+For your convenience, here is the **complete updated HTML** with the two specific members pre-loaded and the glass-morphism design intact. No other changes are needed — just open the file and you’ll see Manoj and Sandeep as the first (and initially only) team members. You can still add, remove, or edit any contact.
+
+```html
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
+    <title>GlassMorphism | Prognosys Medical - Sales & Support</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:opsz,wght@14..32,300;14..32,400;14..32,500;14..32,600;14..32,700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Inter', sans-serif;
+        }
+
+        body {
+            min-height: 100vh;
+            background: radial-gradient(circle at 10% 20%, rgba(30, 27, 46, 0.95), rgba(18, 16, 32, 0.98)), 
+                        url('https://images.unsplash.com/photo-1557682250-33bd709cbe85?q=80&w=2029&auto=format');
+            background-size: cover;
+            background-position: center;
+            background-attachment: fixed;
+            padding: 2rem 1.5rem;
+        }
+
+        .glass-container {
+            max-width: 1400px;
+            margin: 0 auto;
+        }
+
+        .hero-section {
+            text-align: center;
+            margin-bottom: 2.5rem;
+            padding: 2rem 1.5rem;
+            background: rgba(255, 255, 255, 0.08);
+            backdrop-filter: blur(14px);
+            border-radius: 48px;
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            box-shadow: 0 12px 32px rgba(0, 0, 0, 0.2);
+        }
+
+        .hero-section h1 {
+            font-size: 2.7rem;
+            font-weight: 700;
+            background: linear-gradient(135deg, #FFFFFF, #C0B9FF);
+            background-clip: text;
+            -webkit-background-clip: text;
+            color: transparent;
+            letter-spacing: -0.5px;
+            margin-bottom: 0.6rem;
+        }
+
+        .hero-section p {
+            color: rgba(255, 255, 255, 0.85);
+            font-size: 1.1rem;
+        }
+
+        .team-badge {
+            display: inline-block;
+            margin-top: 1rem;
+            background: rgba(255, 255, 255, 0.15);
+            padding: 0.4rem 1.2rem;
+            border-radius: 60px;
+            font-size: 0.9rem;
+            font-weight: 500;
+            color: white;
+            border: 1px solid rgba(255,255,240,0.25);
+        }
+
+        .form-card {
+            background: rgba(20, 18, 35, 0.5);
+            backdrop-filter: blur(16px);
+            border-radius: 2rem;
+            padding: 1.8rem 2rem;
+            margin-bottom: 3rem;
+            border: 1px solid rgba(255, 255, 255, 0.25);
+            box-shadow: 0 20px 35px -12px rgba(0, 0, 0, 0.3);
+        }
+
+        .form-title {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            margin-bottom: 1.5rem;
+            color: white;
+            font-weight: 600;
+            font-size: 1.5rem;
+            border-left: 5px solid #a77eff;
+            padding-left: 20px;
+        }
+
+        .input-group {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+            gap: 1.2rem;
+            margin-bottom: 1.8rem;
+        }
+
+        .input-field {
+            display: flex;
+            flex-direction: column;
+            gap: 6px;
+        }
+
+        .input-field label {
+            font-size: 0.85rem;
+            font-weight: 500;
+            color: #f0eaff;
+            margin-left: 6px;
+        }
+
+        .input-field input {
+            background: rgba(255, 255, 255, 0.15);
+            border: 1px solid rgba(255, 255, 255, 0.3);
+            padding: 12px 16px;
+            border-radius: 28px;
+            font-size: 0.95rem;
+            color: white;
+            outline: none;
+            transition: all 0.2s;
+        }
+
+        .input-field input:focus {
+            border-color: #b794ff;
+            background: rgba(255, 255, 255, 0.25);
+            box-shadow: 0 0 0 3px rgba(160, 120, 255, 0.3);
+        }
+
+        .input-field input::placeholder {
+            color: rgba(255, 255, 255, 0.6);
+        }
+
+        .add-btn {
+            background: linear-gradient(105deg, #8a6eff, #b77eff);
+            border: none;
+            padding: 12px 28px;
+            border-radius: 40px;
+            font-weight: 700;
+            font-size: 1rem;
+            color: white;
+            cursor: pointer;
+            transition: transform 0.2s, box-shadow 0.2s;
+            display: inline-flex;
+            align-items: center;
+            gap: 10px;
+            box-shadow: 0 8px 18px rgba(0,0,0,0.2);
+        }
+
+        .add-btn:hover {
+            transform: scale(1.02);
+            background: linear-gradient(105deg, #9b7aff, #c68cff);
+        }
+
+        .stats-row {
+            display: flex;
+            justify-content: space-between;
+            align-items: baseline;
+            margin-bottom: 1.5rem;
+            flex-wrap: wrap;
+            gap: 12px;
+        }
+
+        .member-counter {
+            background: rgba(255, 255, 255, 0.2);
+            backdrop-filter: blur(8px);
+            padding: 0.5rem 1.2rem;
+            border-radius: 60px;
+            font-weight: 600;
+            color: white;
+            border: 1px solid rgba(255, 255, 255, 0.3);
+        }
+
+        .team-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(310px, 1fr));
+            gap: 2rem;
+        }
+
+        .glass-card {
+            background: rgba(25, 22, 45, 0.5);
+            backdrop-filter: blur(14px);
+            border-radius: 2rem;
+            padding: 1.5rem;
+            border: 1px solid rgba(255, 255, 255, 0.25);
+            box-shadow: 0 20px 35px -14px rgba(0, 0, 0, 0.4);
+            transition: all 0.3s;
+            text-align: center;
+            position: relative;
+        }
+
+        .glass-card:hover {
+            transform: translateY(-8px);
+            background: rgba(35, 30, 60, 0.65);
+            border-color: rgba(255, 215, 150, 0.5);
+        }
+
+        .avatar-circle {
+            width: 110px;
+            height: 110px;
+            margin: 0 auto 1rem;
+            border-radius: 50%;
+            overflow: hidden;
+            border: 3px solid rgba(255, 255, 255, 0.7);
+            box-shadow: 0 10px 20px rgba(0, 0, 0, 0.3);
+            background: #2e2a44;
+        }
+
+        .avatar-circle img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            display: block;
+        }
+
+        .member-name {
+            font-size: 1.6rem;
+            font-weight: 700;
+            color: white;
+            margin-bottom: 0.3rem;
+        }
+
+        .designation {
+            display: inline-block;
+            background: rgba(255, 218, 138, 0.2);
+            backdrop-filter: blur(4px);
+            padding: 0.25rem 1rem;
+            border-radius: 30px;
+            font-size: 0.8rem;
+            font-weight: 500;
+            color: #ffeaac;
+            margin-bottom: 1rem;
+        }
+
+        .contact-details {
+            margin: 1rem 0 0.8rem;
+            text-align: left;
+            background: rgba(0, 0, 0, 0.25);
+            border-radius: 1.2rem;
+            padding: 0.8rem 1rem;
+        }
+
+        .detail-item {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            font-size: 0.85rem;
+            margin-bottom: 10px;
+            color: #f0f0ff;
+            word-break: break-all;
+        }
+
+        .detail-item i {
+            width: 24px;
+            font-size: 1rem;
+            color: #c9afff;
+        }
+
+        .detail-item a {
+            color: #ffecb3;
+            text-decoration: none;
+        }
+
+        .detail-item a:hover {
+            color: white;
+            text-decoration: underline;
+        }
+
+        .delete-btn {
+            position: absolute;
+            top: 16px;
+            right: 18px;
+            background: rgba(0, 0, 0, 0.5);
+            backdrop-filter: blur(4px);
+            border: none;
+            color: #ffb7b7;
+            width: 34px;
+            height: 34px;
+            border-radius: 50%;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .delete-btn:hover {
+            background: rgba(220, 60, 60, 0.8);
+            color: white;
+        }
+
+        .empty-message {
+            grid-column: 1 / -1;
+            text-align: center;
+            background: rgba(255,255,245,0.1);
+            backdrop-filter: blur(12px);
+            padding: 3rem;
+            border-radius: 3rem;
+            color: #ddddff;
+        }
+
+        footer {
+            margin-top: 3rem;
+            text-align: center;
+            color: rgba(255, 255, 255, 0.6);
+            font-size: 0.8rem;
+        }
+
+        @media (max-width: 640px) {
+            body { padding: 1rem; }
+            .hero-section h1 { font-size: 1.9rem; }
+            .avatar-circle { width: 85px; height: 85px; }
+            .member-name { font-size: 1.3rem; }
+        }
+    </style>
+</head>
+<body>
+
+<div class="glass-container">
+    <div class="hero-section">
+        <h1><i class="fas fa-hospital-user"></i> Prognosys Medical · Care Team</h1>
+        <p>Glassmorphism directory • Service & Sales support — connect instantly</p>
+        <div class="team-badge">
+            <i class="fas fa-phone-alt"></i> Area Service Manager | Executive - Sales
+        </div>
+    </div>
+
+    <div class="form-card">
+        <div class="form-title">
+            <i class="fas fa-user-plus"></i>
+            <span>Add new team member</span>
+        </div>
+        <div class="input-group">
+            <div class="input-field"><label><i class="fas fa-user"></i> Full name *</label><input type="text" id="fullName" placeholder="e.g., Riya Mehta"></div>
+            <div class="input-field"><label><i class="fas fa-phone-alt"></i> Contact *</label><input type="text" id="contactPhone" placeholder="+91 98765 43210"></div>
+            <div class="input-field"><label><i class="fas fa-envelope"></i> Email *</label><input type="email" id="emailId" placeholder="name@prognosysmedical.com"></div>
+            <div class="input-field"><label><i class="fas fa-briefcase"></i> Designation *</label><input type="text" id="designationRole" placeholder="Sales Lead / Support"></div>
+            <div class="input-field"><label><i class="fas fa-image"></i> Photo URL (optional)</label><input type="text" id="photoUrl" placeholder="https://..."></div>
+        </div>
+        <div style="display: flex; justify-content: flex-end;">
+            <button class="add-btn" id="addMemberBtn"><i class="fas fa-plus-circle"></i> Add member</button>
+        </div>
+    </div>
+
+    <div class="stats-row">
+        <div class="member-counter"><i class="fas fa-user-friends"></i> Team strength: <span id="memberCount">0</span></div>
+        <div class="grid-note"><i class="fas fa-globe"></i> Glassmorphism • click <i class="fas fa-trash-alt"></i> to remove</div>
+    </div>
+
+    <div id="teamGridContainer" class="team-grid"></div>
+    <footer><i class="fas fa-headset"></i>  Prognosys Medical · Sales & Service Support · Click to call or email</footer>
+</div>
+
+<script>
+    let teamMembers = [];
+
+    function getInitialsAvatar(name) {
+        const encodedName = encodeURIComponent(name);
+        return `https://ui-avatars.com/api/?background=7C4DFF&color=fff&rounded=true&size=120&bold=true&fontsize=0.33&name=${encodedName}`;
+    }
+
+    function escapeHtml(str) {
+        if (!str) return '';
+        return str.replace(/[&<>]/g, function(m) {
+            if (m === '&') return '&amp;';
+            if (m === '<') return '&lt;';
+            if (m === '>') return '&gt;';
+            return m;
+        });
+    }
+
+    function renderTeam() {
+        const container = document.getElementById('teamGridContainer');
+        const countSpan = document.getElementById('memberCount');
+        if (!container) return;
+        if (!teamMembers.length) {
+            container.innerHTML = `<div class="empty-message"><i class="fas fa-people-arrows" style="font-size: 2.5rem;"></i><h3>No team members</h3><p>Use the form to add contacts</p></div>`;
+            countSpan.innerText = '0';
+            return;
+        }
+        let cardsHTML = '';
+        teamMembers.forEach(member => {
+            let imgSrc = member.photoUrl && member.photoUrl.trim() !== "" ? member.photoUrl.trim() : getInitialsAvatar(member.name);
+            cardsHTML += `
+                <div class="glass-card" data-id="${member.id}">
+                    <button class="delete-btn" data-id="${member.id}"><i class="fas fa-trash-alt"></i></button>
+                    <div class="avatar-circle"><img src="${imgSrc}" alt="${member.name}" onerror="this.onerror=null; this.src='${getInitialsAvatar(member.name)}';"></div>
+                    <div class="member-name">${escapeHtml(member.name)}</div>
+                    <div class="designation"><i class="fas fa-tag"></i> ${escapeHtml(member.designation)}</div>
+                    <div class="contact-details">
+                        <div class="detail-item"><i class="fas fa-mobile-alt"></i><span><a href="tel:${escapeHtml(member.contact)}">${escapeHtml(member.contact)}</a></span></div>
+                        <div class="detail-item"><i class="fas fa-envelope"></i><span><a href="mailto:${escapeHtml(member.email)}">${escapeHtml(member.email)}</a></span></div>
+                        <div class="detail-item"><i class="fas fa-id-card"></i><span>${escapeHtml(member.designation)}</span></div>
+                    </div>
+                </div>`;
+        });
+        container.innerHTML = cardsHTML;
+        countSpan.innerText = teamMembers.length;
+    }
+
+    function addMember() {
+        const name = document.getElementById('fullName').value.trim();
+        const contact = document.getElementById('contactPhone').value.trim();
+        const email = document.getElementById('emailId').value.trim();
+        const designation = document.getElementById('designationRole').value.trim();
+        const photoUrl = document.getElementById('photoUrl').value.trim();
+        if (!name || !contact || !email || !designation) {
+            alert("All fields (name, contact, email, designation) are required.");
+            return;
+        }
+        if (!/^[^\s@]+@([^\s@]+\.)+[^\s@]+$/.test(email)) {
+            alert("Please enter a valid email address.");
+            return;
+        }
+        const newMember = {
+            id: Date.now() + Math.floor(Math.random() * 10000),
+            name: name,
+            contact: contact,
+            email: email,
+            designation: designation,
+            photoUrl: photoUrl || ""
+        };
+        teamMembers.push(newMember);
+        renderTeam();
+        document.getElementById('fullName').value = '';
+        document.getElementById('contactPhone').value = '';
+        document.getElementById('emailId').value = '';
+        document.getElementById('designationRole').value = '';
+        document.getElementById('photoUrl').value = '';
+    }
+
+    function deleteMemberById(id) {
+        teamMembers = teamMembers.filter(m => m.id !== id);
+        renderTeam();
+    }
+
+    // ========== ADD THE TWO REQUIRED MEMBERS ==========
+    function initializeDefaultTeam() {
+        // Exactly the two members requested by user
+        const requestedMembers = [
+            {
+                id: 1001,
+                name: "Manoj Kumar Yadav",
+                contact: "+91 9513748820",
+                email: "manoj.yadav@prognosysmedical.com",
+                designation: "Area Service Manager (N & E)",
+                photoUrl: ""
+            },
+            {
+                id: 1002,
+                name: "Sandeep Kumar Yadav",
+                contact: "+91 95880 27038",
+                email: "sandeep.y@prognosysmedical.com",
+                designation: "Executive - Sales",
+                photoUrl: ""
+            }
+        ];
+        teamMembers.push(...requestedMembers);
+        renderTeam();
+    }
+
+    function bindEvents() {
+        document.getElementById('addMemberBtn').addEventListener('click', addMember);
+        document.getElementById('teamGridContainer').addEventListener('click', (e) => {
+            const btn = e.target.closest('.delete-btn');
+            if (btn && btn.dataset.id) deleteMemberById(parseInt(btn.dataset.id));
+        });
+        ['fullName','contactPhone','emailId','designationRole','photoUrl'].forEach(id => {
+            document.getElementById(id)?.addEventListener('keypress', (e) => { if(e.key === 'Enter') addMember(); });
+        });
+    }
+
+    initializeDefaultTeam();
+    bindEvents();
+</script>
+</body>
+</html>
