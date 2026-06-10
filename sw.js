@@ -1,23 +1,8 @@
-const CACHE_NAME = "pdf-tools-cache-v2";
+const CACHE_NAME = "prognosys-cache-v2";
 const urlsToCache = [
   "/",
   "/index.html",    
-  "/add-page-numbers.html",    
-  "/add-signature.html",  
-  "/add-watermark.html", 
-  "/background.css",
-  "/extract-pages.html",
-  "/image-to-pdf.html",
-  "/merge-pdf.html",
-  "/pdf-letterhead.html",
-  "/pdf-to-image.html",
-  "/replace-pages.html",
-  "/rotate_pages.html",
-  "/text-letterhead.html",
-  "/delete-pages.html",
-  "/reorder-pages.html",
-  "/insert-pages.html",
-  "/images/background.jpg",
+  "/images/background.png",
   "/app.js",        
   "/icon-192.png",
   "/icon-512.png"
