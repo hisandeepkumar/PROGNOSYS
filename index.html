@@ -55,7 +55,7 @@
 
     /* ----- MAIN CONTENT (above background) ----- */
     .glass-container {
-      max-width: 1100px;
+      max-width: 1200px;
       margin: 0 auto;
       position: relative;
       z-index: 2;
@@ -125,25 +125,48 @@
       box-shadow: inset 0 1px 0 white, 0 2px 6px rgba(0,0,0,0.02);
     }
 
+    /* ========== TEAM GRID - 3 columns on laptop, responsive ========== */
     .team-grid {
-      display: flex;
-      justify-content: center;
-      flex-wrap: wrap;
+      display: grid;
+      grid-template-columns: 1fr;
       gap: 2rem;
       margin: 2rem 0;
+      justify-items: center;
     }
 
+    /* Tablet: two cards per row */
+    @media (min-width: 640px) {
+      .team-grid {
+        grid-template-columns: repeat(2, 1fr);
+      }
+    }
+
+    /* Desktop / Laptop: three cards per row */
+    @media (min-width: 1024px) {
+      .team-grid {
+        grid-template-columns: repeat(3, 1fr);
+      }
+    }
+
+    /* Glass card styling - now flexible width inside grid */
     .glass-card {
       background: rgba(255, 255, 255, 0.75);
       backdrop-filter: blur(12px);
       border-radius: 2rem;
       padding: 1.8rem 1.5rem;
-      width: 360px;
-      max-width: 100%;
+      width: 100%;
+      max-width: 380px;         /* keeps cards from being too wide on big screens */
       border: 1px solid rgba(255, 255, 255, 0.9);
       box-shadow: 0 20px 35px -12px rgba(0, 0, 0, 0.08);
       transition: all 0.25s ease;
       text-align: center;
+    }
+
+    /* On desktop, allow slightly larger but stay clean */
+    @media (min-width: 1200px) {
+      .glass-card {
+        max-width: 400px;
+      }
     }
 
     .glass-card:hover {
@@ -393,9 +416,10 @@
       display: block;
     }
 
-    @media (max-width: 780px) {
+    /* mobile adjustments to keep original look */
+    @media (max-width: 640px) {
       body { padding: 1rem; }
-      .glass-card { width: 100%; max-width: 380px; }
+      .glass-card { width: 100%; max-width: 100%; }
       .member-name { font-size: 1.4rem; }
       .avatar-circle { width: 95px; height: 95px; }
       .hero-logo { height: 40px; }
@@ -422,11 +446,6 @@
   </div>
 
   <div class="team-grid">
-   
-
-
-   
-    
     <!-- Manoj Card -->
     <div class="glass-card">
       <div class="avatar-circle" id="manojAvatar">
@@ -442,37 +461,35 @@
       <div class="website-link"><i class="fas fa-building"></i> <a href="https://www.prognosysmedical.com" target="_blank">www.prognosysmedical.com</a></div>
     </div>
 
-
-  <!-- Akash Card -->
-<div class="glass-card">
-  <div class="avatar-circle" id="akashAvatar">
-    <img src="images/akash.png" alt="Akash Vishwakarma" onerror="this.onerror=null; this.parentElement.innerHTML = '<div class=\'initials-fallback\'>AV</div>';">
-  </div>
-  <div class="member-name">Akash Vishwakarma</div>
-  <div class="designation"><i class="fas fa-map-marker-alt"></i> Manager</div>
-  <div class="contact-details">
-    <div class="detail-item"><i class="fas fa-mobile-alt"></i><span><a href="tel:+918527978161">+91 85279 78161</a></span></div>
-    <div class="detail-item"><i class="fas fa-envelope"></i><span><a href="mailto:akash.v@prognosysmedical.com">akash.v@prognosysmedical.com</a></span></div>
-    <div class="detail-item"><i class="fas fa-globe"></i><span><a href="https://www.prognosysmedical.com" target="_blank">prognosysmedical.com</a></span></div>
-  </div>
-  <div class="website-link"><i class="fas fa-building"></i> <a href="https://www.prognosysmedical.com" target="_blank">www.prognosysmedical.com</a></div>
-</div>
+    <!-- Akash Card -->
+    <div class="glass-card">
+      <div class="avatar-circle" id="akashAvatar">
+        <img src="images/akash.png" alt="Akash Vishwakarma" onerror="this.onerror=null; this.parentElement.innerHTML = '<div class=\'initials-fallback\'>AV</div>';">
+      </div>
+      <div class="member-name">Akash Vishwakarma</div>
+      <div class="designation"><i class="fas fa-map-marker-alt"></i> Manager</div>
+      <div class="contact-details">
+        <div class="detail-item"><i class="fas fa-mobile-alt"></i><span><a href="tel:+918527978161">+91 85279 78161</a></span></div>
+        <div class="detail-item"><i class="fas fa-envelope"></i><span><a href="mailto:akash.v@prognosysmedical.com">akash.v@prognosysmedical.com</a></span></div>
+        <div class="detail-item"><i class="fas fa-globe"></i><span><a href="https://www.prognosysmedical.com" target="_blank">prognosysmedical.com</a></span></div>
+      </div>
+      <div class="website-link"><i class="fas fa-building"></i> <a href="https://www.prognosysmedical.com" target="_blank">www.prognosysmedical.com</a></div>
+    </div>
 
     <!-- Sunil Card -->
-<div class="glass-card">
-  <div class="avatar-circle" id="sunilAvatar">
-    <img src="images/sunil.png" alt="Sunil Sethi" onerror="this.onerror=null; this.parentElement.innerHTML = '<div class=\'initials-fallback\'>SS</div>';">
-  </div>
-  <div class="member-name">Sunil Sethi</div>
-  <div class="designation"><i class="fas fa-map-marker-alt"></i> Manager - Application</div>
-  <div class="contact-details">
-    <div class="detail-item"><i class="fas fa-mobile-alt"></i><span><a href="tel:+919654954258">+91 96549 54258</a></span></div>
-    <div class="detail-item"><i class="fas fa-envelope"></i><span><a href="mailto:sunil.sethi@prognosysmedical.com">sunil.sethi@prognosysmedical.com</a></span></div>
-    <div class="detail-item"><i class="fas fa-globe"></i><span><a href="https://www.prognosysmedical.com" target="_blank">prognosysmedical.com</a></span></div>
-  </div>
-  <div class="website-link"><i class="fas fa-building"></i> <a href="https://www.prognosysmedical.com" target="_blank">www.prognosysmedical.com</a></div>
-</div>
-
+    <div class="glass-card">
+      <div class="avatar-circle" id="sunilAvatar">
+        <img src="images/sunil.png" alt="Sunil Sethi" onerror="this.onerror=null; this.parentElement.innerHTML = '<div class=\'initials-fallback\'>SS</div>';">
+      </div>
+      <div class="member-name">Sunil Sethi</div>
+      <div class="designation"><i class="fas fa-map-marker-alt"></i> Manager - Application</div>
+      <div class="contact-details">
+        <div class="detail-item"><i class="fas fa-mobile-alt"></i><span><a href="tel:+919654954258">+91 96549 54258</a></span></div>
+        <div class="detail-item"><i class="fas fa-envelope"></i><span><a href="mailto:sunil.sethi@prognosysmedical.com">sunil.sethi@prognosysmedical.com</a></span></div>
+        <div class="detail-item"><i class="fas fa-globe"></i><span><a href="https://www.prognosysmedical.com" target="_blank">prognosysmedical.com</a></span></div>
+      </div>
+      <div class="website-link"><i class="fas fa-building"></i> <a href="https://www.prognosysmedical.com" target="_blank">www.prognosysmedical.com</a></div>
+    </div>
 
     <!-- RAKESH Card -->
     <div class="glass-card">
