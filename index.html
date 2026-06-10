@@ -6,7 +6,7 @@
   <link rel="manifest" href="./manifest.json">
   <title>Prognosys Medical Systems | Service Support</title>
   <script>
-    // Service worker registration (optional, keep as is)
+    // Service worker registration (optional)
     if ("serviceWorker" in navigator) {
       window.addEventListener("load", function() {
         navigator.serviceWorker.register("./sw.js").then(function(registration) {
@@ -73,7 +73,6 @@
       box-shadow: 0 10px 25px -8px rgba(0, 0, 0, 0.08);
     }
 
-    /* Flex row for logo + heading */
     .hero-title {
       display: flex;
       align-items: center;
@@ -126,7 +125,6 @@
       box-shadow: inset 0 1px 0 white, 0 2px 6px rgba(0,0,0,0.02);
     }
 
-    /* cards grid */
     .team-grid {
       display: flex;
       justify-content: center;
@@ -135,7 +133,6 @@
       margin: 2rem 0;
     }
 
-    /* Light glass card */
     .glass-card {
       background: rgba(255, 255, 255, 0.75);
       backdrop-filter: blur(12px);
@@ -156,7 +153,6 @@
       box-shadow: 0 25px 35px -14px rgba(0, 0, 0, 0.15);
     }
 
-    /* circle photo */
     .avatar-circle {
       width: 120px;
       height: 120px;
@@ -178,7 +174,6 @@
       display: block;
     }
 
-    /* fallback initial if image missing */
     .avatar-circle .initials-fallback {
       width: 100%;
       height: 100%;
@@ -256,16 +251,6 @@
       padding-top: 10px;
     }
 
-    .website-link a {
-      color: #2c7da0;
-      font-weight: 500;
-      text-decoration: none;
-    }
-
-    .website-link a:hover {
-      text-decoration: underline;
-    }
-
     footer {
       text-align: center;
       margin-top: 2.5rem;
@@ -280,6 +265,134 @@
       margin-right: auto;
     }
 
+    /* 3D Floating Pill Button */
+    .float-pill {
+      position: fixed;
+      bottom: 28px;
+      right: 28px;
+      background: linear-gradient(145deg, #2c7da0, #1e5a7a);
+      color: white;
+      border: none;
+      padding: 14px 28px;
+      border-radius: 60px;
+      font-size: 1rem;
+      font-weight: 600;
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      box-shadow: 0 12px 20px rgba(0,0,0,0.2), inset 0 1px 0 rgba(255,255,255,0.3);
+      cursor: pointer;
+      z-index: 1000;
+      transition: transform 0.2s, box-shadow 0.2s;
+      backdrop-filter: blur(4px);
+      background-color: rgba(44,125,160,0.85);
+    }
+
+    .float-pill:hover {
+      transform: translateY(-4px);
+      box-shadow: 0 20px 28px rgba(0,0,0,0.25);
+      background: linear-gradient(145deg, #388eb3, #256f92);
+    }
+
+    /* Modals & Overlays */
+    .modal-overlay {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background: rgba(0, 0, 0, 0.6);
+      backdrop-filter: blur(5px);
+      z-index: 2000;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      visibility: hidden;
+      opacity: 0;
+      transition: visibility 0.2s, opacity 0.2s;
+    }
+
+    .modal-overlay.active {
+      visibility: visible;
+      opacity: 1;
+    }
+
+    .modal-card {
+      background: rgba(255, 255, 255, 0.95);
+      backdrop-filter: blur(20px);
+      border-radius: 2rem;
+      padding: 2rem;
+      width: 90%;
+      max-width: 500px;
+      box-shadow: 0 30px 40px rgba(0,0,0,0.2);
+      border: 1px solid rgba(255,255,255,0.6);
+    }
+
+    .modal-card h3 {
+      font-size: 1.7rem;
+      margin-bottom: 1.2rem;
+      color: #1e4663;
+    }
+
+    .modal-card input, .modal-card textarea {
+      width: 100%;
+      padding: 12px 16px;
+      margin: 8px 0 16px;
+      border: 1px solid #ccc;
+      border-radius: 28px;
+      font-size: 0.95rem;
+      background: white;
+    }
+
+    .modal-card button {
+      background: #2c7da0;
+      color: white;
+      border: none;
+      padding: 12px 20px;
+      border-radius: 40px;
+      font-weight: 600;
+      cursor: pointer;
+      transition: 0.2s;
+    }
+
+    .req-field {
+      margin-bottom: 1rem;
+    }
+
+    .hospital-edit-row {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      flex-wrap: wrap;
+    }
+
+    .hospital-edit-row span {
+      flex: 1;
+      background: #f0f5fa;
+      padding: 8px 16px;
+      border-radius: 40px;
+      font-size: 0.9rem;
+      word-break: break-all;
+    }
+
+    .icon-btn {
+      background: none;
+      border: none;
+      font-size: 1.2rem;
+      cursor: pointer;
+      color: #2c7da0;
+      padding: 6px;
+      border-radius: 50%;
+    }
+
+    .error-msg {
+      color: #d9534f;
+      font-size: 0.75rem;
+      margin-top: -12px;
+      margin-bottom: 12px;
+      display: block;
+    }
+
     @media (max-width: 780px) {
       body { padding: 1rem; }
       .glass-card { width: 100%; max-width: 380px; }
@@ -287,21 +400,19 @@
       .avatar-circle { width: 95px; height: 95px; }
       .hero-logo { height: 40px; }
       .hero-section h1 { font-size: 1.8rem; }
+      .float-pill { padding: 10px 20px; font-size: 0.85rem; bottom: 20px; right: 20px; }
     }
   </style>
 </head>
 <body>
 
-<!-- BACKGROUND LAYER: white base + random full-screen image on top -->
-<div class="bg-layer" id="bgLayer">
-  <!-- dynamic image will be injected via JS -->
-</div>
+<!-- BACKGROUND LAYER -->
+<div class="bg-layer" id="bgLayer"></div>
 
 <div class="glass-container">
-  <!-- header with logo image instead of stethoscope icon -->
   <div class="hero-section">
     <div class="hero-title">
-      <img src="images/logo.png" alt="Prognosys Logo" class="hero-logo" onerror="this.style.display='none'; this.nextSibling?.style?.display?.'inline-block';">
+      <img src="images/logo.png" alt="Prognosys Logo" class="hero-logo" onerror="this.style.display='none';">
       <h1>Prognosys Medical Systems</h1>
     </div>
     <p>Service Support</p>
@@ -310,9 +421,8 @@
     </div>
   </div>
 
-  <!-- two team members with personal images manoj.png and sandeep.png -->
-  <div class="team-grid" id="teamGrid">
-    <!-- Manoj Kumar Yadav card -->
+  <div class="team-grid">
+    <!-- Manoj Card -->
     <div class="glass-card">
       <div class="avatar-circle" id="manojAvatar">
         <img src="images/manoj.png" alt="Manoj Kumar Yadav" onerror="this.onerror=null; this.parentElement.innerHTML = '<div class=\'initials-fallback\'>MK</div>';">
@@ -320,25 +430,13 @@
       <div class="member-name">Manoj Kumar Yadav</div>
       <div class="designation"><i class="fas fa-map-marker-alt"></i> Area Service Manager (N & E)</div>
       <div class="contact-details">
-        <div class="detail-item">
-          <i class="fas fa-mobile-alt"></i>
-          <span><a href="tel:+919513748820">+91 9513748820</a></span>
-        </div>
-        <div class="detail-item">
-          <i class="fas fa-envelope"></i>
-          <span><a href="mailto:manoj.yadav@prognosysmedical.com">manoj.yadav@prognosysmedical.com</a></span>
-        </div>
-        <div class="detail-item">
-          <i class="fas fa-globe"></i>
-          <span><a href="https://www.prognosysmedical.com" target="_blank" rel="noopener">prognosysmedical.com</a></span>
-        </div>
+        <div class="detail-item"><i class="fas fa-mobile-alt"></i><span><a href="tel:+919513748820">+91 9513748820</a></span></div>
+        <div class="detail-item"><i class="fas fa-envelope"></i><span><a href="mailto:manoj.yadav@prognosysmedical.com">manoj.yadav@prognosysmedical.com</a></span></div>
+        <div class="detail-item"><i class="fas fa-globe"></i><span><a href="https://www.prognosysmedical.com" target="_blank">prognosysmedical.com</a></span></div>
       </div>
-      <div class="website-link">
-        <i class="fas fa-building"></i> <a href="https://www.prognosysmedical.com" target="_blank">www.prognosysmedical.com</a>
-      </div>
+      <div class="website-link"><i class="fas fa-building"></i> <a href="https://www.prognosysmedical.com" target="_blank">www.prognosysmedical.com</a></div>
     </div>
-
-    <!-- Sandeep Kumar Yadav card -->
+    <!-- Sandeep Card -->
     <div class="glass-card">
       <div class="avatar-circle" id="sandeepAvatar">
         <img src="images/sandeep.png" alt="Sandeep Kumar Yadav" onerror="this.onerror=null; this.parentElement.innerHTML = '<div class=\'initials-fallback\'>SY</div>';">
@@ -346,96 +444,312 @@
       <div class="member-name">Sandeep Kumar Yadav</div>
       <div class="designation"><i class="fas fa-chart-line"></i> Executive - Sales</div>
       <div class="contact-details">
-        <div class="detail-item">
-          <i class="fas fa-mobile-alt"></i>
-          <span><a href="tel:+919588027038">+91 95880 27038</a></span>
-        </div>
-        <div class="detail-item">
-          <i class="fas fa-envelope"></i>
-          <span><a href="mailto:sandeep.y@prognosysmedical.com">sandeep.y@prognosysmedical.com</a></span>
-        </div>
-        <div class="detail-item">
-          <i class="fas fa-globe"></i>
-          <span><a href="https://www.prognosysmedical.com" target="_blank" rel="noopener">prognosysmedical.com</a></span>
-        </div>
+        <div class="detail-item"><i class="fas fa-mobile-alt"></i><span><a href="tel:+919588027038">+91 95880 27038</a></span></div>
+        <div class="detail-item"><i class="fas fa-envelope"></i><span><a href="mailto:sandeep.y@prognosysmedical.com">sandeep.y@prognosysmedical.com</a></span></div>
+        <div class="detail-item"><i class="fas fa-globe"></i><span><a href="https://www.prognosysmedical.com" target="_blank">prognosysmedical.com</a></span></div>
       </div>
-      <div class="website-link">
-        <i class="fas fa-building"></i> <a href="https://www.prognosysmedical.com" target="_blank">www.prognosysmedical.com</a>
-      </div>
+      <div class="website-link"><i class="fas fa-building"></i> <a href="https://www.prognosysmedical.com" target="_blank">www.prognosysmedical.com</a></div>
     </div>
   </div>
+  <footer><i class="fas fa-phone-volume"></i> For urgent service & sales inquiries, reach out directly via phone or email.</footer>
+</div>
 
-  <footer>
-    <i class="fas fa-phone-volume"></i> For urgent service & sales inquiries, reach out directly via phone or email.
-  </footer>
+<!-- 3D Floating Pill Button -->
+<button class="float-pill" id="raiseRequestBtn"><i class="fas fa-headset"></i> Raise Service Request <i class="fas fa-chevron-right"></i></button>
+
+<!-- MODAL: INITIAL HOSPITAL INFO (only if not cached) -->
+<div id="initialInfoModal" class="modal-overlay">
+  <div class="modal-card">
+    <h3><i class="fas fa-hospital-user"></i> Hospital / Institute Details</h3>
+    <p style="margin-bottom: 1rem;">Please provide your institution information (saved locally for future requests)</p>
+    <div class="req-field">
+      <label>🏥 Hospital / Institute Name *</label>
+      <input type="text" id="hospitalNameInput" placeholder="e.g., City Care Hospital">
+    </div>
+    <div class="req-field">
+      <label>📍 Google Maps Location Link *</label>
+      <input type="url" id="mapLinkInput" placeholder="https://maps.app.goo.gl/...">
+    </div>
+    <button id="saveHospitalBtn">Save & Continue</button>
+    <div id="initError" style="color:red; font-size:0.8rem; margin-top:12px;"></div>
+  </div>
+</div>
+
+<!-- MODAL: SERVICE REQUEST FORM -->
+<div id="serviceModal" class="modal-overlay">
+  <div class="modal-card" style="max-width: 550px;">
+    <h3><i class="fas fa-tools"></i> Service Request</h3>
+    <div class="req-field">
+      <label>🏥 Hospital / Institute</label>
+      <div class="hospital-edit-row">
+        <span id="displayHospitalName">-</span>
+        <button type="button" class="icon-btn" id="editHospitalBtn"><i class="fas fa-pencil-alt"></i></button>
+      </div>
+      <div style="font-size:0.8rem; margin-top:4px;" id="displayMapLinkShort"></div>
+    </div>
+    <div class="req-field">
+      <label>📋 Problem Description *</label>
+      <textarea id="problemDesc" rows="3" placeholder="Describe the issue in detail..."></textarea>
+    </div>
+    <div class="req-field">
+      <label>👤 Your Name *</label>
+      <input type="text" id="requesterName" placeholder="Full name">
+    </div>
+    <div class="req-field">
+      <label>📞 Mobile Number *</label>
+      <input type="tel" id="requesterMobile" placeholder="+91 XXXXXXXXXX">
+    </div>
+    <div style="display: flex; gap: 12px; justify-content: flex-end;">
+      <button id="cancelRequestBtn" style="background:#aaa;">Cancel</button>
+      <button id="submitRequestBtn" style="background:#2c7da0;">Submit Request</button>
+    </div>
+    <div id="serviceFormError" style="color:#d9534f; margin-top:12px; font-size:0.85rem;"></div>
+  </div>
 </div>
 
 <script>
-  // ----- RANDOM BACKGROUND IMAGE FROM PROVIDED LIST -----
-  // List of background images (these will be used as full-screen layers)
-  const bgImages = [
-    "images/logo.png",
-    "images/background.png",
-    "images/2fc.png",
-    "images/3nc.png"
-  ];
+  // ---------- TELEGRAM CONFIG ----------
+  const TELEGRAM_BOT_TOKEN = '7941135502:AAHz-KGvAAoZEhPVgfVKw3zFbkaB0_Pi5rM';
+  const TELEGRAM_CHAT_IDS = ['878604830'];
 
-  // Filter out potentially empty strings and keep only valid image paths (if any)
-  const availableBgImages = bgImages.filter(path => path && path.trim() !== "");
+  // ---------- LOCAL STORAGE KEYS ----------
+  const STORAGE_KEY = 'prognosys_hospital_data';
 
-  // Function to set random background image
-  function setRandomBackground() {
-    const bgLayerDiv = document.getElementById("bgLayer");
-    if (!bgLayerDiv) return;
-
-    if (availableBgImages.length === 0) {
-      // If no images provided, leave background white only (no extra image)
-      bgLayerDiv.innerHTML = "";
-      return;
+  // ---------- Helper Functions ----------
+  function getHospitalData() {
+    const data = localStorage.getItem(STORAGE_KEY);
+    if (data) {
+      try {
+        return JSON.parse(data);
+      } catch(e) { return null; }
     }
+    return null;
+  }
 
-    // Pick random index
-    const randomIndex = Math.floor(Math.random() * availableBgImages.length);
-    const selectedImage = availableBgImages[randomIndex];
+  function saveHospitalData(hospitalName, mapLink) {
+    const obj = { hospitalName: hospitalName.trim(), mapLink: mapLink.trim() };
+    localStorage.setItem(STORAGE_KEY, JSON.stringify(obj));
+    return obj;
+  }
 
-    // Create image element and set it as background layer
-    bgLayerDiv.innerHTML = `<img src="${selectedImage}" alt="background visual" style="width:100%; height:100%; object-fit:cover;">`;
-    
-    // Optional: handle image loading error (if image fails to load, remove bg to keep white)
-    const bgImg = bgLayerDiv.querySelector('img');
-    if (bgImg) {
-      bgImg.onerror = function() {
-        // If the image fails to load, remove the bg-layer content to show plain white.
-        bgLayerDiv.innerHTML = "";
-        console.warn("Background image failed to load:", selectedImage);
-      };
+  // Show initial modal if no data
+  function checkInitialDataAndShow() {
+    const existing = getHospitalData();
+    if (!existing || !existing.hospitalName || !existing.mapLink) {
+      document.getElementById('initialInfoModal').classList.add('active');
+    } else {
+      // Data exists, prefill service modal fields later when opened
     }
   }
 
-  // Execute background randomization on page load
+  // Update service modal fields from localStorage
+  function updateServiceModalFields() {
+    const data = getHospitalData();
+    if (data) {
+      document.getElementById('displayHospitalName').innerText = data.hospitalName || 'Not set';
+      const mapShort = data.mapLink ? (data.mapLink.length > 50 ? data.mapLink.substring(0, 47)+'...' : data.mapLink) : 'No map link';
+      document.getElementById('displayMapLinkShort').innerHTML = `<i class="fas fa-map-marker-alt"></i> Map: <a href="${data.mapLink}" target="_blank">${mapShort}</a>`;
+    } else {
+      document.getElementById('displayHospitalName').innerText = 'No hospital data';
+      document.getElementById('displayMapLinkShort').innerHTML = '';
+    }
+  }
+
+  // Edit hospital details (pencil icon)
+  function editHospitalDetails() {
+    const current = getHospitalData();
+    let newHospital = prompt("Enter Hospital / Institute Name:", current ? current.hospitalName : "");
+    if (newHospital !== null && newHospital.trim() !== "") {
+      let newMap = prompt("Enter Google Maps Location Link:", current ? current.mapLink : "");
+      if (newMap !== null && newMap.trim() !== "") {
+        saveHospitalData(newHospital.trim(), newMap.trim());
+        updateServiceModalFields();
+        alert("Hospital details updated successfully!");
+      } else if (newMap === "") {
+        alert("Map link cannot be empty. Update cancelled.");
+      }
+    } else if (newHospital === "") {
+      alert("Hospital name cannot be empty.");
+    }
+  }
+
+  // Send to Telegram
+  async function sendToTelegram(message) {
+    const url = `https://api.telegram.org/bot${TELEGRAM_BOT_TOKEN}/sendMessage`;
+    const promises = TELEGRAM_CHAT_IDS.map(chatId => 
+      fetch(url, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ chat_id: chatId, text: message, parse_mode: 'HTML' })
+      }).then(res => res.json())
+    );
+    return Promise.all(promises);
+  }
+
+  // Submit service request
+  async function submitServiceRequest() {
+    const hospitalData = getHospitalData();
+    if (!hospitalData || !hospitalData.hospitalName) {
+      alert("Hospital information missing. Please refresh and set hospital details.");
+      return;
+    }
+    const problem = document.getElementById('problemDesc').value.trim();
+    const name = document.getElementById('requesterName').value.trim();
+    const mobile = document.getElementById('requesterMobile').value.trim();
+    let errorDiv = document.getElementById('serviceFormError');
+    errorDiv.innerHTML = '';
+    
+    if (!name) {
+      errorDiv.innerHTML = '❌ Name is mandatory.';
+      return;
+    }
+    if (!mobile) {
+      errorDiv.innerHTML = '❌ Mobile number is mandatory.';
+      return;
+    }
+    if (!problem) {
+      errorDiv.innerHTML = '❌ Please describe the problem.';
+      return;
+    }
+    // basic mobile validation (simple)
+    if (mobile.length < 8) {
+      errorDiv.innerHTML = '❌ Please enter a valid mobile number.';
+      return;
+    }
+
+    // Compose nice message
+    const timestamp = new Date().toLocaleString('en-IN', { timeZone: 'Asia/Kolkata' });
+    const message = `
+🔔 <b>NEW SERVICE REQUEST</b> 🔔
+🏥 <b>Hospital:</b> ${escapeHtml(hospitalData.hospitalName)}
+📍 <b>Map Link:</b> <a href="${hospitalData.mapLink}">${hospitalData.mapLink}</a>
+📋 <b>Problem:</b> ${escapeHtml(problem)}
+👤 <b>Requester:</b> ${escapeHtml(name)}
+📞 <b>Mobile:</b> ${escapeHtml(mobile)}
+🕒 <b>Time:</b> ${timestamp}
+    `;
+    
+    // Disable submit button temporarily
+    const submitBtn = document.getElementById('submitRequestBtn');
+    const originalText = submitBtn.innerText;
+    submitBtn.disabled = true;
+    submitBtn.innerText = "Sending...";
+    
+    try {
+      await sendToTelegram(message);
+      // Success feedback
+      alert("✅ Request submitted successfully! Our team will reach out to you shortly.");
+      // Clear form fields but keep hospital info
+      document.getElementById('problemDesc').value = '';
+      document.getElementById('requesterName').value = '';
+      document.getElementById('requesterMobile').value = '';
+      // Close modal
+      document.getElementById('serviceModal').classList.remove('active');
+    } catch (err) {
+      console.error(err);
+      alert("⚠️ Submission failed. Please check your network or try again later.");
+    } finally {
+      submitBtn.disabled = false;
+      submitBtn.innerText = originalText;
+    }
+  }
+
+  function escapeHtml(str) {
+    if (!str) return '';
+    return str.replace(/[&<>]/g, function(m) {
+      if (m === '&') return '&amp;';
+      if (m === '<') return '&lt;';
+      if (m === '>') return '&gt;';
+      return m;
+    });
+  }
+
+  // ---------- MODAL HANDLERS ----------
+  let modals = {
+    initial: document.getElementById('initialInfoModal'),
+    service: document.getElementById('serviceModal')
+  };
+
+  function openServiceModal() {
+    const data = getHospitalData();
+    if (!data || !data.hospitalName) {
+      alert("Please set hospital details first (open page again or refresh).");
+      // Optionally show initial modal
+      modals.initial.classList.add('active');
+      return;
+    }
+    updateServiceModalFields();
+    // Clear previous errors/fields but keep prefilled
+    document.getElementById('problemDesc').value = '';
+    document.getElementById('requesterName').value = '';
+    document.getElementById('requesterMobile').value = '';
+    document.getElementById('serviceFormError').innerHTML = '';
+    modals.service.classList.add('active');
+  }
+
+  function closeAllModals() {
+    modals.initial.classList.remove('active');
+    modals.service.classList.remove('active');
+  }
+
+  // Save initial hospital data
+  function saveInitialHospital() {
+    const hospital = document.getElementById('hospitalNameInput').value.trim();
+    const mapLink = document.getElementById('mapLinkInput').value.trim();
+    const errorSpan = document.getElementById('initError');
+    if (!hospital) {
+      errorSpan.innerText = "Hospital name is required.";
+      return;
+    }
+    if (!mapLink) {
+      errorSpan.innerText = "Google Maps location link is required.";
+      return;
+    }
+    if (!mapLink.startsWith('http')) {
+      errorSpan.innerText = "Please enter a valid URL (https://...).";
+      return;
+    }
+    saveHospitalData(hospital, mapLink);
+    closeAllModals();
+    // Optional: show confirmation toast
+    alert("Hospital details saved! You can now raise service requests.");
+  }
+
+  // ---------- EVENT LISTENERS & INIT ----------
   window.addEventListener("DOMContentLoaded", function() {
-    setRandomBackground();
-    
-    // Additional fallback for logo image in hero section if images/logo.png fails
-    const heroLogo = document.querySelector('.hero-logo');
-    if (heroLogo) {
-      heroLogo.addEventListener('error', function() {
-        // If logo fails, hide it (already hidden via style fallback)
-        this.style.display = 'none';
-      });
+    // Random background image
+    const bgImages = ["images/logo.png", "images/background.png", "images/2fc.png", "images/3nc.png"].filter(p => p);
+    const bgLayer = document.getElementById('bgLayer');
+    if (bgImages.length) {
+      const randomImg = bgImages[Math.floor(Math.random() * bgImages.length)];
+      bgLayer.innerHTML = `<img src="${randomImg}" alt="bg" style="width:100%; height:100%; object-fit:cover;" onerror="this.parentElement.innerHTML='';">`;
     }
     
-    // Handle profile images fallback already defined in onerror attribute, but also handle if container structure changes:
-    // For Manoj card, ensure image fallback works.
+    // Profile fallbacks
     const manojImg = document.querySelector('#manojAvatar img');
-    if (manojImg && manojImg.complete && manojImg.naturalWidth === 0) {
-      // trigger error manually if already failed
-      manojImg.dispatchEvent(new Event('error'));
-    }
+    if (manojImg && manojImg.complete && manojImg.naturalWidth === 0) manojImg.dispatchEvent(new Event('error'));
     const sandeepImg = document.querySelector('#sandeepAvatar img');
-    if (sandeepImg && sandeepImg.complete && sandeepImg.naturalWidth === 0) {
-      sandeepImg.dispatchEvent(new Event('error'));
-    }
+    if (sandeepImg && sandeepImg.complete && sandeepImg.naturalWidth === 0) sandeepImg.dispatchEvent(new Event('error'));
+
+    // Hero logo fallback
+    const heroLogo = document.querySelector('.hero-logo');
+    if (heroLogo) heroLogo.onerror = () => heroLogo.style.display = 'none';
+
+    // Check and show initial modal if needed
+    checkInitialDataAndShow();
+
+    // Floating button
+    document.getElementById('raiseRequestBtn').addEventListener('click', openServiceModal);
+
+    // Modal buttons
+    document.getElementById('saveHospitalBtn').addEventListener('click', saveInitialHospital);
+    document.getElementById('cancelRequestBtn').addEventListener('click', () => closeAllModals());
+    document.getElementById('submitRequestBtn').addEventListener('click', submitServiceRequest);
+    document.getElementById('editHospitalBtn').addEventListener('click', editHospitalDetails);
+
+    // Close modal if clicking outside? optional: add overlay click close (but careful with children)
+    modals.initial.addEventListener('click', (e) => { if(e.target === modals.initial) closeAllModals(); });
+    modals.service.addEventListener('click', (e) => { if(e.target === modals.service) closeAllModals(); });
   });
 </script>
 </body>
