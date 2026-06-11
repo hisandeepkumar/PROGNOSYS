@@ -6,7 +6,6 @@
   <link rel="manifest" href="./manifest.json">
   <title>Prognosys Medical Systems | Service Support</title>
   <script>
-    // Service worker registration (optional)
     if ("serviceWorker" in navigator) {
       window.addEventListener("load", function() {
         navigator.serviceWorker.register("./sw.js").then(function(registration) {
@@ -29,13 +28,13 @@
 
     body {
       min-height: 100vh;
-      /* White solid background as the base layer */
       background: #ffffff;
       padding: 2rem 1.5rem;
       position: relative;
+      overflow-x: hidden; /* Prevent any horizontal scroll */
     }
 
-    /* ----- BACKGROUND IMAGE LAYER (random image on load) ----- */
+    /* ----- BACKGROUND IMAGE LAYER (full screen, no overflow) ----- */
     .bg-layer {
       position: fixed;
       top: 0;
@@ -125,7 +124,7 @@
       box-shadow: inset 0 1px 0 white, 0 2px 6px rgba(0,0,0,0.02);
     }
 
-    /* ========== TEAM GRID - 3 columns on laptop, responsive ========== */
+    /* ========== TEAM GRID - RESPONSIVE ========== */
     .team-grid {
       display: grid;
       grid-template-columns: 1fr;
@@ -134,39 +133,30 @@
       justify-items: center;
     }
 
-    /* Tablet: two cards per row */
     @media (min-width: 640px) {
       .team-grid {
         grid-template-columns: repeat(2, 1fr);
       }
     }
 
-    /* Desktop / Laptop: three cards per row */
     @media (min-width: 1024px) {
       .team-grid {
         grid-template-columns: repeat(3, 1fr);
       }
     }
 
-    /* Glass card styling - now flexible width inside grid */
+    /* Glass card styling */
     .glass-card {
       background: rgba(255, 255, 255, 0.75);
       backdrop-filter: blur(12px);
       border-radius: 2rem;
       padding: 1.8rem 1.5rem;
       width: 100%;
-      max-width: 380px;         /* keeps cards from being too wide on big screens */
+      max-width: 380px;
       border: 1px solid rgba(255, 255, 255, 0.9);
       box-shadow: 0 20px 35px -12px rgba(0, 0, 0, 0.08);
       transition: all 0.25s ease;
       text-align: center;
-    }
-
-    /* On desktop, allow slightly larger but stay clean */
-    @media (min-width: 1200px) {
-      .glass-card {
-        max-width: 400px;
-      }
     }
 
     .glass-card:hover {
@@ -288,7 +278,7 @@
       margin-right: auto;
     }
 
-    /* 3D Floating Pill Button */
+    /* Floating Pill Button */
     .float-pill {
       position: fixed;
       bottom: 28px;
@@ -308,7 +298,6 @@
       z-index: 1000;
       transition: transform 0.2s, box-shadow 0.2s;
       backdrop-filter: blur(4px);
-      background-color: rgba(44,125,160,0.85);
     }
 
     .float-pill:hover {
@@ -317,7 +306,7 @@
       background: linear-gradient(145deg, #388eb3, #256f92);
     }
 
-    /* Modals & Overlays */
+    /* Modals */
     .modal-overlay {
       position: fixed;
       top: 0;
@@ -408,15 +397,6 @@
       border-radius: 50%;
     }
 
-    .error-msg {
-      color: #d9534f;
-      font-size: 0.75rem;
-      margin-top: -12px;
-      margin-bottom: 12px;
-      display: block;
-    }
-
-    /* mobile adjustments to keep original look */
     @media (max-width: 640px) {
       body { padding: 1rem; }
       .glass-card { width: 100%; max-width: 100%; }
@@ -430,7 +410,7 @@
 </head>
 <body>
 
-<!-- BACKGROUND LAYER -->
+<!-- BACKGROUND LAYER (full screen, no overflow) -->
 <div class="bg-layer" id="bgLayer"></div>
 
 <div class="glass-container">
@@ -446,24 +426,21 @@
   </div>
 
   <div class="team-grid">
-
-
-
     <!-- Amanjot Card -->
-<div class="glass-card">
-  <div class="avatar-circle" id="amanjotAvatar">
-    <img src="images/amanjot.png" alt="Amanjot Singh" onerror="this.onerror=null; this.parentElement.innerHTML = '<div class=\'initials-fallback\'>AS</div>';">
-  </div>
-  <div class="member-name">Amanjot Singh</div>
-  <div class="designation"><i class="fas fa-map-marker-alt"></i> Zonal Sales Manager - North</div>
-  <div class="contact-details">
-    <div class="detail-item"><i class="fas fa-mobile-alt"></i><span><a href="tel:+919871318962">+91 9871318962</a></span></div>
-    <div class="detail-item"><i class="fas fa-envelope"></i><span><a href="mailto:amanjotsingh@prognosysmedical.com">amanjotsingh@prognosysmedical.com</a></span></div>
-    <div class="detail-item"><i class="fas fa-globe"></i><span><a href="https://www.prognosysmedical.com" target="_blank">prognosysmedical.com</a></span></div>
-  </div>
-  <div class="website-link"><i class="fas fa-building"></i> <a href="https://www.prognosysmedical.com" target="_blank">www.prognosysmedical.com</a></div>
-</div>
-    
+    <div class="glass-card">
+      <div class="avatar-circle" id="amanjotAvatar">
+        <img src="images/amanjot.png" alt="Amanjot Singh" onerror="this.onerror=null; this.parentElement.innerHTML = '<div class=\'initials-fallback\'>AS</div>';">
+      </div>
+      <div class="member-name">Amanjot Singh</div>
+      <div class="designation"><i class="fas fa-map-marker-alt"></i> Zonal Sales Manager - North</div>
+      <div class="contact-details">
+        <div class="detail-item"><i class="fas fa-mobile-alt"></i><span><a href="tel:+919871318962">+91 9871318962</a></span></div>
+        <div class="detail-item"><i class="fas fa-envelope"></i><span><a href="mailto:amanjotsingh@prognosysmedical.com">amanjotsingh@prognosysmedical.com</a></span></div>
+        <div class="detail-item"><i class="fas fa-globe"></i><span><a href="https://www.prognosysmedical.com" target="_blank">prognosysmedical.com</a></span></div>
+      </div>
+      <div class="website-link"><i class="fas fa-building"></i> <a href="https://www.prognosysmedical.com" target="_blank">www.prognosysmedical.com</a></div>
+    </div>
+
     <!-- Manoj Card -->
     <div class="glass-card">
       <div class="avatar-circle" id="manojAvatar">
@@ -509,21 +486,21 @@
       <div class="website-link"><i class="fas fa-building"></i> <a href="https://www.prognosysmedical.com" target="_blank">www.prognosysmedical.com</a></div>
     </div>
 
-   <!-- Rakesh Card -->
-<div class="glass-card">
-  <div class="avatar-circle" id="rakeshAvatar">
-    <img src="images/rakesh.png" alt="Rakesh Mehra" onerror="this.onerror=null; this.parentElement.innerHTML = '<div class=\'initials-fallback\'>RM</div>';">
-  </div>
-  <div class="member-name">Rakesh Mehra</div>
-  <div class="designation"><i class="fas fa-map-marker-alt"></i> Service Engineer</div>
-  <div class="contact-details">
-    <div class="detail-item"><i class="fas fa-mobile-alt"></i><span><a href="tel:+919649408889">+91 9649408889</a></span></div>
-    <div class="detail-item"><i class="fas fa-envelope"></i><span><a href="mailto:rakesh.kumar@prognosysmedical.com">rakesh.kumar@prognosysmedical.com</a></span></div>
-    <div class="detail-item"><i class="fas fa-globe"></i><span><a href="https://www.prognosysmedical.com" target="_blank">prognosysmedical.com</a></span></div>
-  </div>
-  <div class="website-link"><i class="fas fa-building"></i> <a href="https://www.prognosysmedical.com" target="_blank">www.prognosysmedical.com</a></div>
-</div>
-    
+    <!-- Rakesh Card -->
+    <div class="glass-card">
+      <div class="avatar-circle" id="rakeshAvatar">
+        <img src="images/rakesh.png" alt="Rakesh Mehra" onerror="this.onerror=null; this.parentElement.innerHTML = '<div class=\'initials-fallback\'>RM</div>';">
+      </div>
+      <div class="member-name">Rakesh Mehra</div>
+      <div class="designation"><i class="fas fa-map-marker-alt"></i> Service Engineer</div>
+      <div class="contact-details">
+        <div class="detail-item"><i class="fas fa-mobile-alt"></i><span><a href="tel:+919649408889">+91 9649408889</a></span></div>
+        <div class="detail-item"><i class="fas fa-envelope"></i><span><a href="mailto:rakesh.kumar@prognosysmedical.com">rakesh.kumar@prognosysmedical.com</a></span></div>
+        <div class="detail-item"><i class="fas fa-globe"></i><span><a href="https://www.prognosysmedical.com" target="_blank">prognosysmedical.com</a></span></div>
+      </div>
+      <div class="website-link"><i class="fas fa-building"></i> <a href="https://www.prognosysmedical.com" target="_blank">www.prognosysmedical.com</a></div>
+    </div>
+
     <!-- Sandeep Card -->
     <div class="glass-card">
       <div class="avatar-circle" id="sandeepAvatar">
@@ -545,7 +522,7 @@
 <!-- 3D Floating Pill Button -->
 <button class="float-pill" id="raiseRequestBtn"><i class="fas fa-headset"></i> Raise Service Request <i class="fas fa-chevron-right"></i></button>
 
-<!-- MODAL: INITIAL HOSPITAL INFO (only if not cached) -->
+<!-- MODAL: INITIAL HOSPITAL INFO -->
 <div id="initialInfoModal" class="modal-overlay">
   <div class="modal-card">
     <h3><i class="fas fa-hospital-user"></i> Hospital / Institute Details</h3>
@@ -596,20 +573,14 @@
 </div>
 
 <script>
-  // ---------- TELEGRAM CONFIG ----------
   const TELEGRAM_BOT_TOKEN = '7941135502:AAHz-KGvAAoZEhPVgfVKw3zFbkaB0_Pi5rM';
   const TELEGRAM_CHAT_IDS = ['878604830'];
-
-  // ---------- LOCAL STORAGE KEYS ----------
   const STORAGE_KEY = 'prognosys_hospital_data';
 
-  // ---------- Helper Functions ----------
   function getHospitalData() {
     const data = localStorage.getItem(STORAGE_KEY);
     if (data) {
-      try {
-        return JSON.parse(data);
-      } catch(e) { return null; }
+      try { return JSON.parse(data); } catch(e) { return null; }
     }
     return null;
   }
@@ -620,17 +591,13 @@
     return obj;
   }
 
-  // Show initial modal if no data
   function checkInitialDataAndShow() {
     const existing = getHospitalData();
     if (!existing || !existing.hospitalName || !existing.mapLink) {
       document.getElementById('initialInfoModal').classList.add('active');
-    } else {
-      // Data exists, prefill service modal fields later when opened
     }
   }
 
-  // Update service modal fields from localStorage
   function updateServiceModalFields() {
     const data = getHospitalData();
     if (data) {
@@ -643,7 +610,6 @@
     }
   }
 
-  // Edit hospital details (pencil icon)
   function editHospitalDetails() {
     const current = getHospitalData();
     let newHospital = prompt("Enter Hospital / Institute Name:", current ? current.hospitalName : "");
@@ -661,7 +627,6 @@
     }
   }
 
-  // Send to Telegram
   async function sendToTelegram(message) {
     const url = `https://api.telegram.org/bot${TELEGRAM_BOT_TOKEN}/sendMessage`;
     const promises = TELEGRAM_CHAT_IDS.map(chatId => 
@@ -674,7 +639,6 @@
     return Promise.all(promises);
   }
 
-  // Submit service request
   async function submitServiceRequest() {
     const hospitalData = getHospitalData();
     if (!hospitalData || !hospitalData.hospitalName) {
@@ -687,25 +651,11 @@
     let errorDiv = document.getElementById('serviceFormError');
     errorDiv.innerHTML = '';
     
-    if (!name) {
-      errorDiv.innerHTML = '❌ Name is mandatory.';
-      return;
-    }
-    if (!mobile) {
-      errorDiv.innerHTML = '❌ Mobile number is mandatory.';
-      return;
-    }
-    if (!problem) {
-      errorDiv.innerHTML = '❌ Please describe the problem.';
-      return;
-    }
-    // basic mobile validation (simple)
-    if (mobile.length < 8) {
-      errorDiv.innerHTML = '❌ Please enter a valid mobile number.';
-      return;
-    }
+    if (!name) { errorDiv.innerHTML = '❌ Name is mandatory.'; return; }
+    if (!mobile) { errorDiv.innerHTML = '❌ Mobile number is mandatory.'; return; }
+    if (!problem) { errorDiv.innerHTML = '❌ Please describe the problem.'; return; }
+    if (mobile.length < 8) { errorDiv.innerHTML = '❌ Please enter a valid mobile number.'; return; }
 
-    // Compose nice message
     const timestamp = new Date().toLocaleString('en-IN', { timeZone: 'Asia/Kolkata' });
     const message = `
 🔔 <b>NEW SERVICE REQUEST</b> 🔔
@@ -717,7 +667,6 @@
 🕒 <b>Time:</b> ${timestamp}
     `;
     
-    // Disable submit button temporarily
     const submitBtn = document.getElementById('submitRequestBtn');
     const originalText = submitBtn.innerText;
     submitBtn.disabled = true;
@@ -725,13 +674,10 @@
     
     try {
       await sendToTelegram(message);
-      // Success feedback
       alert("✅ Request submitted successfully! Our team will reach out to you shortly.");
-      // Clear form fields but keep hospital info
       document.getElementById('problemDesc').value = '';
       document.getElementById('requesterName').value = '';
       document.getElementById('requesterMobile').value = '';
-      // Close modal
       document.getElementById('serviceModal').classList.remove('active');
     } catch (err) {
       console.error(err);
@@ -752,8 +698,7 @@
     });
   }
 
-  // ---------- MODAL HANDLERS ----------
-  let modals = {
+  const modals = {
     initial: document.getElementById('initialInfoModal'),
     service: document.getElementById('serviceModal')
   };
@@ -761,13 +706,11 @@
   function openServiceModal() {
     const data = getHospitalData();
     if (!data || !data.hospitalName) {
-      alert("Please set hospital details first (open page again or refresh).");
-      // Optionally show initial modal
+      alert("Please set hospital details first.");
       modals.initial.classList.add('active');
       return;
     }
     updateServiceModalFields();
-    // Clear previous errors/fields but keep prefilled
     document.getElementById('problemDesc').value = '';
     document.getElementById('requesterName').value = '';
     document.getElementById('requesterMobile').value = '';
@@ -780,32 +723,19 @@
     modals.service.classList.remove('active');
   }
 
-  // Save initial hospital data
   function saveInitialHospital() {
     const hospital = document.getElementById('hospitalNameInput').value.trim();
     const mapLink = document.getElementById('mapLinkInput').value.trim();
     const errorSpan = document.getElementById('initError');
-    if (!hospital) {
-      errorSpan.innerText = "Hospital name is required.";
-      return;
-    }
-    if (!mapLink) {
-      errorSpan.innerText = "Google Maps location link is required.";
-      return;
-    }
-    if (!mapLink.startsWith('http')) {
-      errorSpan.innerText = "Please enter a valid URL (https://...).";
-      return;
-    }
+    if (!hospital) { errorSpan.innerText = "Hospital name is required."; return; }
+    if (!mapLink) { errorSpan.innerText = "Google Maps location link is required."; return; }
+    if (!mapLink.startsWith('http')) { errorSpan.innerText = "Please enter a valid URL (https://...)."; return; }
     saveHospitalData(hospital, mapLink);
     closeAllModals();
-    // Optional: show confirmation toast
     alert("Hospital details saved! You can now raise service requests.");
   }
 
-  // ---------- EVENT LISTENERS & INIT ----------
   window.addEventListener("DOMContentLoaded", function() {
-    // Random background image
     const bgImages = ["images/logo.png", "images/background.png", "images/2fc.png", "images/3nc.png"].filter(p => p);
     const bgLayer = document.getElementById('bgLayer');
     if (bgImages.length) {
@@ -818,24 +748,16 @@
     if (manojImg && manojImg.complete && manojImg.naturalWidth === 0) manojImg.dispatchEvent(new Event('error'));
     const sandeepImg = document.querySelector('#sandeepAvatar img');
     if (sandeepImg && sandeepImg.complete && sandeepImg.naturalWidth === 0) sandeepImg.dispatchEvent(new Event('error'));
-
-    // Hero logo fallback
+    
     const heroLogo = document.querySelector('.hero-logo');
     if (heroLogo) heroLogo.onerror = () => heroLogo.style.display = 'none';
 
-    // Check and show initial modal if needed
     checkInitialDataAndShow();
-
-    // Floating button
     document.getElementById('raiseRequestBtn').addEventListener('click', openServiceModal);
-
-    // Modal buttons
     document.getElementById('saveHospitalBtn').addEventListener('click', saveInitialHospital);
-    document.getElementById('cancelRequestBtn').addEventListener('click', () => closeAllModals());
+    document.getElementById('cancelRequestBtn').addEventListener('click', closeAllModals);
     document.getElementById('submitRequestBtn').addEventListener('click', submitServiceRequest);
     document.getElementById('editHospitalBtn').addEventListener('click', editHospitalDetails);
-
-    // Close modal if clicking outside? optional: add overlay click close (but careful with children)
     modals.initial.addEventListener('click', (e) => { if(e.target === modals.initial) closeAllModals(); });
     modals.service.addEventListener('click', (e) => { if(e.target === modals.service) closeAllModals(); });
   });
