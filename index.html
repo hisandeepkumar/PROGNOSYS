@@ -26,15 +26,22 @@
       font-family: 'Inter', sans-serif;
     }
 
+    /* Critical fix for background overflow */
+    html, body {
+      height: 100%;
+      margin: 0;
+      padding: 0;
+    }
+
     body {
-      min-height: 100vh;
       background: #ffffff;
       padding: 2rem 1.5rem;
       position: relative;
-      overflow-x: hidden; /* Prevent any horizontal scroll */
+      overflow-x: hidden;
+      overflow-y: auto;
     }
 
-    /* ----- BACKGROUND IMAGE LAYER (full screen, no overflow) ----- */
+    /* ----- BACKGROUND IMAGE LAYER (full screen, never overflows) ----- */
     .bg-layer {
       position: fixed;
       top: 0;
@@ -410,7 +417,7 @@
 </head>
 <body>
 
-<!-- BACKGROUND LAYER (full screen, no overflow) -->
+<!-- BACKGROUND LAYER (full screen, never overflows) -->
 <div class="bg-layer" id="bgLayer"></div>
 
 <div class="glass-container">
