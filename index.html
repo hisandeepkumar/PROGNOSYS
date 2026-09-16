@@ -1,0 +1,1734 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+  <link rel="manifest" href="./manifest.json">
+  <title>Prognosys Medical Systems | Service Support</title>
+  <script>
+    if ("serviceWorker" in navigator) {
+      window.addEventListener("load", function() {
+        navigator.serviceWorker.register("./sw.js").then(function(registration) {
+          console.log("ServiceWorker registered: ", registration);
+        }).catch(function(error) {
+          console.log("ServiceWorker registration failed: ", error);
+        });
+      });
+    }
+  </script>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+      font-family: 'Inter', sans-serif;
+    }
+
+    /* Critical fix for background overflow */
+    html, body {
+      height: 100%;
+      margin: 0;
+      padding: 0;
+    }
+
+    body {
+      background: #ffffff;
+      padding: 2rem 1.5rem;
+      position: relative;
+      overflow-x: hidden;
+      overflow-y: auto;
+    }
+
+    /* ----- BACKGROUND IMAGE LAYER (full screen, never overflows) ----- */
+    .bg-layer {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      z-index: 0;
+      overflow: hidden;
+    }
+
+    .bg-layer img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      display: block;
+    }
+
+    /* ----- MAIN CONTENT (above background) ----- */
+    .glass-container {
+      max-width: 1200px;
+      margin: 0 auto;
+      position: relative;
+      z-index: 2;
+    }
+
+    /* Hero section - light glass */
+    .hero-section {
+      text-align: center;
+      margin-bottom: 2.5rem;
+      padding: 2rem 1.8rem;
+      background: rgba(255, 255, 255, 0.65);
+      backdrop-filter: blur(12px);
+      border-radius: 48px;
+      border: 1px solid rgba(255, 255, 255, 0.8);
+      box-shadow: 0 10px 25px -8px rgba(0, 0, 0, 0.08);
+    }
+
+    .hero-title {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 12px;
+      flex-wrap: wrap;
+      margin-bottom: 0.5rem;
+    }
+
+    .hero-logo {
+      height: 55px;
+      width: auto;
+      display: inline-block;
+      filter: drop-shadow(0 2px 4px rgba(0,0,0,0.05));
+    }
+
+    .hero-section h1 {
+      font-size: 2.4rem;
+      font-weight: 700;
+      background: linear-gradient(135deg, #1a4d8c, #2c7da0);
+      background-clip: text;
+      -webkit-background-clip: text;
+      color: transparent;
+      letter-spacing: -0.3px;
+      margin: 0;
+      line-height: 1.2;
+    }
+
+    .hero-section p {
+      color: #2c3e66;
+      font-size: 1rem;
+      font-weight: 500;
+      background: rgba(255,255,242,0.7);
+      display: inline-block;
+      padding: 0.3rem 1.2rem;
+      border-radius: 40px;
+      backdrop-filter: blur(2px);
+    }
+
+    .team-badge {
+      display: inline-block;
+      margin-top: 0.8rem;
+      background: #eef3fc;
+      padding: 0.4rem 1.4rem;
+      border-radius: 60px;
+      font-size: 0.85rem;
+      font-weight: 500;
+      color: #1f6392;
+      border: 1px solid rgba(0,0,0,0.05);
+      box-shadow: inset 0 1px 0 white, 0 2px 6px rgba(0,0,0,0.02);
+    }
+
+    /* ========== TEAM GRID - RESPONSIVE ========== */
+    .team-grid {
+      display: grid;
+      grid-template-columns: 1fr;
+      gap: 2rem;
+      margin: 2rem 0;
+      justify-items: center;
+    }
+
+    @media (min-width: 640px) {
+      .team-grid {
+        grid-template-columns: repeat(2, 1fr);
+      }
+    }
+
+    @media (min-width: 1024px) {
+      .team-grid {
+        grid-template-columns: repeat(3, 1fr);
+      }
+    }
+
+    /* Glass card styling */
+    .glass-card {
+      background: rgba(255, 255, 255, 0.75);
+      backdrop-filter: blur(12px);
+      border-radius: 2rem;
+      padding: 1.8rem 1.5rem;
+      width: 100%;
+      max-width: 380px;
+      border: 1px solid rgba(255, 255, 255, 0.9);
+      box-shadow: 0 20px 35px -12px rgba(0, 0, 0, 0.08);
+      transition: all 0.25s ease;
+      text-align: center;
+    }
+
+    .glass-card:hover {
+      transform: translateY(-6px);
+      background: rgba(255, 255, 255, 0.85);
+      border-color: #cde3f5;
+      box-shadow: 0 25px 35px -14px rgba(0, 0, 0, 0.15);
+    }
+
+    .avatar-circle {
+      width: 120px;
+      height: 120px;
+      margin: 0 auto 1.2rem;
+      border-radius: 50%;
+      overflow: hidden;
+      border: 3px solid white;
+      box-shadow: 0 8px 18px rgba(0, 0, 0, 0.05);
+      background: #eef2fa;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    .avatar-circle img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      display: block;
+    }
+
+    .avatar-circle .initials-fallback {
+      width: 100%;
+      height: 100%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 3rem;
+      font-weight: 600;
+      background: linear-gradient(145deg, #2c7da0, #1b5a7a);
+      color: white;
+      text-transform: uppercase;
+    }
+
+    .member-name {
+      font-size: 1.7rem;
+      font-weight: 700;
+      color: #1e2f41;
+      letter-spacing: -0.2px;
+      margin-bottom: 0.3rem;
+    }
+
+    .designation {
+      display: inline-block;
+      background: #e9f0f9;
+      padding: 0.3rem 1.2rem;
+      border-radius: 40px;
+      font-size: 0.8rem;
+      font-weight: 600;
+      color: #2c6e9e;
+      margin-bottom: 1.2rem;
+      border: 1px solid rgba(70,130,200,0.15);
+    }
+
+    .contact-details {
+      margin: 1rem 0 0;
+      text-align: left;
+      background: rgba(240, 248, 255, 0.7);
+      border-radius: 1.2rem;
+      padding: 0.9rem 1.2rem;
+    }
+
+    .detail-item {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      font-size: 0.85rem;
+      margin-bottom: 12px;
+      color: #1e4663;
+      word-break: break-all;
+    }
+
+    .detail-item i {
+      width: 28px;
+      font-size: 1.1rem;
+      color: #2a73a8;
+    }
+
+    .detail-item a {
+      color: #175d87;
+      text-decoration: none;
+      font-weight: 500;
+      transition: 0.15s;
+    }
+
+    .detail-item a:hover {
+      color: #0a3b57;
+      text-decoration: underline;
+    }
+
+    .website-link {
+      font-size: 0.8rem;
+      margin-top: 8px;
+      text-align: center;
+      border-top: 1px solid rgba(0,0,0,0.05);
+      padding-top: 10px;
+    }
+
+    footer {
+      text-align: center;
+      margin-top: 2.5rem;
+      font-size: 0.8rem;
+      color: #4b6f8c;
+      background: rgba(255,255,245,0.5);
+      backdrop-filter: blur(4px);
+      padding: 1rem;
+      border-radius: 40px;
+      width: fit-content;
+      margin-left: auto;
+      margin-right: auto;
+    }
+
+    /* Floating Pill Button */
+    .float-pill {
+      position: fixed;
+      bottom: 28px;
+      right: 28px;
+      background: linear-gradient(145deg, #2c7da0, #1e5a7a);
+      color: white;
+      border: none;
+      padding: 14px 28px;
+      border-radius: 60px;
+      font-size: 1rem;
+      font-weight: 600;
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      box-shadow: 0 12px 20px rgba(0,0,0,0.2), inset 0 1px 0 rgba(255,255,255,0.3);
+      cursor: pointer;
+      z-index: 1000;
+      transition: transform 0.2s, box-shadow 0.2s;
+      backdrop-filter: blur(4px);
+    }
+
+    .float-pill:hover {
+      transform: translateY(-4px);
+      box-shadow: 0 20px 28px rgba(0,0,0,0.25);
+      background: linear-gradient(145deg, #388eb3, #256f92);
+    }
+
+    /* ----- SMALL SETTINGS BUTTON (bottom-left) ----- */
+    .float-pill.settings-pill {
+      left: 28px;
+      right: auto;
+      padding: 0;
+      width: 54px;
+      height: 54px;
+      border-radius: 50%;
+      justify-content: center;
+      font-size: 1.25rem;
+      background: linear-gradient(145deg, #3d5a80, #24384f);
+    }
+
+    .float-pill.settings-pill:hover {
+      background: linear-gradient(145deg, #4b6d96, #2c4460);
+      transform: translateY(-4px) rotate(25deg);
+    }
+
+    /* Modals */
+    .modal-overlay {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background: rgba(0, 0, 0, 0.6);
+      backdrop-filter: blur(5px);
+      z-index: 2000;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      visibility: hidden;
+      opacity: 0;
+      transition: visibility 0.2s, opacity 0.2s;
+      padding: 16px;
+    }
+
+    .modal-overlay.active {
+      visibility: visible;
+      opacity: 1;
+    }
+
+    .modal-card {
+      background: rgba(255, 255, 255, 0.95);
+      backdrop-filter: blur(20px);
+      border-radius: 2rem;
+      padding: 2rem;
+      width: 90%;
+      max-width: 500px;
+      box-shadow: 0 30px 40px rgba(0,0,0,0.2);
+      border: 1px solid rgba(255,255,255,0.6);
+    }
+
+    .modal-card h3 {
+      font-size: 1.7rem;
+      margin-bottom: 1.2rem;
+      color: #1e4663;
+    }
+
+    .modal-card input, .modal-card textarea {
+      width: 100%;
+      padding: 12px 16px;
+      margin: 8px 0 16px;
+      border: 1px solid #ccc;
+      border-radius: 28px;
+      font-size: 0.95rem;
+      background: white;
+      outline: none;
+    }
+
+    .modal-card input:focus, .modal-card textarea:focus {
+      border-color: #2c7da0;
+      box-shadow: 0 0 0 3px rgba(44,125,160,0.12);
+    }
+
+    .modal-card button {
+      background: #2c7da0;
+      color: white;
+      border: none;
+      padding: 12px 20px;
+      border-radius: 40px;
+      font-weight: 600;
+      cursor: pointer;
+      transition: 0.2s;
+    }
+
+    .modal-card button:hover {
+      background: #23647f;
+    }
+
+    .req-field {
+      margin-bottom: 1rem;
+    }
+
+    .req-field label {
+      font-size: 0.85rem;
+      font-weight: 600;
+      color: #2c4a63;
+      display: block;
+    }
+
+    .hospital-edit-row {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      flex-wrap: wrap;
+    }
+
+    .hospital-edit-row span {
+      flex: 1;
+      background: #f0f5fa;
+      padding: 8px 16px;
+      border-radius: 40px;
+      font-size: 0.9rem;
+      word-break: break-all;
+    }
+
+    .icon-btn {
+      background: none;
+      border: none;
+      font-size: 1.2rem;
+      cursor: pointer;
+      color: #2c7da0;
+      padding: 6px;
+      border-radius: 50%;
+    }
+
+    /* ===== CONFIG MODAL SPECIFIC ===== */
+    .config-card {
+      max-width: 640px;
+      max-height: 88vh;
+      overflow-y: auto;
+    }
+
+    .config-card h3 {
+      font-size: 1.5rem;
+      margin-bottom: 0.4rem;
+    }
+
+    .config-section-title {
+      font-size: 0.95rem;
+      font-weight: 700;
+      color: #1e4663;
+      margin: 1.4rem 0 0.7rem;
+      padding-bottom: 6px;
+      border-bottom: 1px solid #e1ebf5;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    .add-row {
+      display: flex;
+      gap: 10px;
+      align-items: center;
+    }
+
+    .add-row input {
+      margin: 0 !important;
+      flex: 1;
+      min-width: 0;
+    }
+
+    .add-btn {
+      width: 46px;
+      height: 46px;
+      min-width: 46px;
+      padding: 0 !important;
+      border-radius: 50% !important;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 1rem;
+    }
+
+    .numbers-list {
+      list-style: none;
+      margin: 10px 0 0;
+      padding: 0;
+    }
+
+    .numbers-list li {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 10px;
+      background: #f0f5fa;
+      border-radius: 40px;
+      padding: 6px 8px 6px 16px;
+      margin-bottom: 8px;
+      font-size: 0.88rem;
+      color: #1e4663;
+      word-break: break-all;
+    }
+
+    .numbers-list li .num-text {
+      flex: 1;
+      min-width: 0;
+    }
+
+    .remove-btn {
+      background: #ffe5e5 !important;
+      color: #c0392b !important;
+      border: none;
+      border-radius: 50%;
+      width: 34px;
+      height: 34px;
+      min-width: 34px;
+      padding: 0 !important;
+      font-size: 0.8rem;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    .remove-btn:hover {
+      background: #ffd0d0 !important;
+    }
+
+    .empty-note {
+      font-size: 0.8rem;
+      color: #8697a8;
+      padding: 6px 4px;
+      display: block;
+    }
+
+    .history-list {
+      max-height: 220px;
+      overflow-y: auto;
+      margin-bottom: 10px;
+      padding-right: 4px;
+    }
+
+    .history-item {
+      background: #f7fafd;
+      border: 1px solid #e4eef8;
+      border-radius: 14px;
+      padding: 10px 14px;
+      margin-bottom: 8px;
+      font-size: 0.78rem;
+      color: #34506b;
+      line-height: 1.5;
+    }
+
+    .history-item b {
+      color: #1e4663;
+      font-size: 0.82rem;
+    }
+
+    .small-btn {
+      font-size: 0.78rem !important;
+      padding: 8px 16px !important;
+      background: #94a3b8 !important;
+    }
+
+    .small-btn:hover {
+      background: #7f8fa4 !important;
+    }
+
+    /* ===== BACKUP / RESTORE ===== */
+    .backup-row {
+      display: flex;
+      gap: 10px;
+      flex-wrap: wrap;
+      align-items: center;
+    }
+
+    .backup-btn {
+      background: #2c7da0 !important;
+      color: #fff;
+      border: none;
+      padding: 10px 18px;
+      border-radius: 40px;
+      font-size: 0.8rem;
+      font-weight: 600;
+      cursor: pointer;
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      transition: 0.2s;
+    }
+
+    .backup-btn:hover { background: #23647f !important; }
+
+    .backup-btn.alt { background: #1a7f37 !important; }
+    .backup-btn.alt:hover { background: #146c2e !important; }
+
+    .backup-btn:disabled {
+      opacity: 0.6;
+      cursor: not-allowed;
+    }
+
+    .backup-msg {
+      font-size: 0.8rem;
+      margin-top: 10px;
+      line-height: 1.5;
+      word-break: break-word;
+    }
+
+    @media (max-width: 640px) {
+      body { padding: 1rem; }
+      .glass-card { width: 100%; max-width: 100%; }
+      .member-name { font-size: 1.4rem; }
+      .avatar-circle { width: 95px; height: 95px; }
+      .hero-logo { height: 40px; }
+      .hero-section h1 { font-size: 1.8rem; }
+      .float-pill { padding: 10px 20px; font-size: 0.85rem; bottom: 20px; right: 20px; }
+      .float-pill.settings-pill {
+        left: 20px;
+        right: auto;
+        width: 46px;
+        height: 46px;
+        padding: 0;
+        font-size: 1rem;
+      }
+      .modal-card { padding: 1.4rem; border-radius: 1.5rem; }
+      .modal-card h3 { font-size: 1.3rem; }
+      .config-card { max-height: 92vh; }
+    }
+  </style>
+</head>
+<body>
+
+<!-- BACKGROUND LAYER (full screen, never overflows) -->
+<div class="bg-layer" id="bgLayer"></div>
+
+<div class="glass-container">
+  <div class="hero-section">
+    <div class="hero-title">
+      <img src="images/logo.png" alt="Prognosys Logo" class="hero-logo" onerror="this.style.display='none';">
+      <h1>Prognosys Medical Systems</h1>
+    </div>
+    <p>Service Support</p>
+    <div class="team-badge">
+      <i class="fas fa-headset"></i> Dedicated Service & Sales Support · Direct Contact
+    </div>
+  </div>
+
+  <div class="team-grid">
+    <!-- Amanjot Card -->
+    <div class="glass-card">
+      <div class="avatar-circle" id="amanjotAvatar">
+        <img src="images/amanjot.png" alt="Amanjot Singh" onerror="this.onerror=null; this.parentElement.innerHTML = '<div class=\'initials-fallback\'>AS</div>';">
+      </div>
+      <div class="member-name">Amanjot Singh</div>
+      <div class="designation"><i class="fas fa-map-marker-alt"></i> Zonal Sales Manager - North</div>
+      <div class="contact-details">
+        <div class="detail-item"><i class="fas fa-mobile-alt"></i><span><a href="tel:+919871318962">+91 9871318962</a></span></div>
+        <div class="detail-item"><i class="fas fa-envelope"></i><span><a href="mailto:amanjotsingh@prognosysmedical.com">amanjotsingh@prognosysmedical.com</a></span></div>
+        <div class="detail-item"><i class="fas fa-globe"></i><span><a href="https://www.prognosysmedical.com" target="_blank">prognosysmedical.com</a></span></div>
+      </div>
+      <div class="website-link"><i class="fas fa-building"></i> <a href="https://www.prognosysmedical.com" target="_blank">www.prognosysmedical.com</a></div>
+    </div>
+
+
+<!-- Pankaj Card -->
+    <div class="glass-card">
+      <div class="avatar-circle" id="pankajAvatar">
+        <img src="images/pankaj.png" alt="Pankaj Singh" onerror="this.onerror=null; this.parentElement.innerHTML = '<div class=\'initials-fallback\'>PS</div>';">
+      </div>
+      <div class="member-name">Pankaj Singh</div>
+      <div class="designation"><i class="fas fa-map-marker-alt"></i> Service Manager - North</div>
+      <div class="contact-details">
+        <div class="detail-item"><i class="fas fa-mobile-alt"></i><span><a href="tel:+917055018320">+91 7055018320</a></span></div>
+        <div class="detail-item"><i class="fas fa-envelope"></i><span><a href="mailto:pankajsingh@prognosysmedical.com">pankajsingh@prognosysmedical.com</a></span></div>
+        <div class="detail-item"><i class="fas fa-globe"></i><span><a href="https://www.prognosysmedical.com" target="_blank">prognosysmedical.com</a></span></div>
+      </div>
+      <div class="website-link"><i class="fas fa-building"></i> <a href="https://www.prognosysmedical.com" target="_blank">www.prognosysmedical.com</a></div>
+    </div>
+    
+    <!-- Manoj Card -->
+    <div class="glass-card">
+      <div class="avatar-circle" id="manojAvatar">
+        <img src="images/manoj.png" alt="Manoj Kumar Yadav" onerror="this.onerror=null; this.parentElement.innerHTML = '<div class=\'initials-fallback\'>MK</div>';">
+      </div>
+      <div class="member-name">Manoj Kumar Yadav</div>
+      <div class="designation"><i class="fas fa-map-marker-alt"></i> Area Service Manager (N & E)</div>
+      <div class="contact-details">
+        <div class="detail-item"><i class="fas fa-mobile-alt"></i><span><a href="tel:+919513748820">+91 9513748820</a></span></div>
+        <div class="detail-item"><i class="fas fa-envelope"></i><span><a href="mailto:manoj.yadav@prognosysmedical.com">manoj.yadav@prognosysmedical.com</a></span></div>
+        <div class="detail-item"><i class="fas fa-globe"></i><span><a href="https://www.prognosysmedical.com" target="_blank">prognosysmedical.com</a></span></div>
+      </div>
+      <div class="website-link"><i class="fas fa-building"></i> <a href="https://www.prognosysmedical.com" target="_blank">www.prognosysmedical.com</a></div>
+    </div>
+
+    <!-- Akash Card -->
+    <div class="glass-card">
+      <div class="avatar-circle" id="akashAvatar">
+        <img src="images/akash.png" alt="Akash Vishwakarma" onerror="this.onerror=null; this.parentElement.innerHTML = '<div class=\'initials-fallback\'>AV</div>';">
+      </div>
+      <div class="member-name">Akash Vishwakarma</div>
+      <div class="designation"><i class="fas fa-map-marker-alt"></i> Business Development Manager</div>
+      <div class="contact-details">
+        <div class="detail-item"><i class="fas fa-mobile-alt"></i><span><a href="tel:+918527978161">+91 85279 78161</a></span></div>
+        <div class="detail-item"><i class="fas fa-envelope"></i><span><a href="mailto:akash.v@prognosysmedical.com">akash.v@prognosysmedical.com</a></span></div>
+        <div class="detail-item"><i class="fas fa-globe"></i><span><a href="https://www.prognosysmedical.com" target="_blank">prognosysmedical.com</a></span></div>
+      </div>
+      <div class="website-link"><i class="fas fa-building"></i> <a href="https://www.prognosysmedical.com" target="_blank">www.prognosysmedical.com</a></div>
+    </div>
+
+    <!-- Sunil Card -->
+    <div class="glass-card">
+      <div class="avatar-circle" id="sunilAvatar">
+        <img src="images/sunil.png" alt="Sunil Sethi" onerror="this.onerror=null; this.parentElement.innerHTML = '<div class=\'initials-fallback\'>SS</div>';">
+      </div>
+      <div class="member-name">Sunil Sethi</div>
+      <div class="designation"><i class="fas fa-map-marker-alt"></i> Manager - Application</div>
+      <div class="contact-details">
+        <div class="detail-item"><i class="fas fa-mobile-alt"></i><span><a href="tel:+919654954258">+91 96549 54258</a></span></div>
+        <div class="detail-item"><i class="fas fa-envelope"></i><span><a href="mailto:sunil.sethi@prognosysmedical.com">sunil.sethi@prognosysmedical.com</a></span></div>
+        <div class="detail-item"><i class="fas fa-globe"></i><span><a href="https://www.prognosysmedical.com" target="_blank">prognosysmedical.com</a></span></div>
+      </div>
+      <div class="website-link"><i class="fas fa-building"></i> <a href="https://www.prognosysmedical.com" target="_blank">www.prognosysmedical.com</a></div>
+    </div>
+
+    <!-- Rakesh Card -->
+    <div class="glass-card">
+      <div class="avatar-circle" id="rakeshAvatar">
+        <img src="images/rakesh.png" alt="Rakesh Mehra" onerror="this.onerror=null; this.parentElement.innerHTML = '<div class=\'initials-fallback\'>RM</div>';">
+      </div>
+      <div class="member-name">Rakesh Mehra</div>
+      <div class="designation"><i class="fas fa-map-marker-alt"></i> Senior Service Engineer</div>
+      <div class="contact-details">
+        <div class="detail-item"><i class="fas fa-mobile-alt"></i><span><a href="tel:+919649408889">+91 9649408889</a></span></div>
+        <div class="detail-item"><i class="fas fa-envelope"></i><span><a href="mailto:rakesh.kumar@prognosysmedical.com">rakesh.kumar@prognosysmedical.com</a></span></div>
+        <div class="detail-item"><i class="fas fa-globe"></i><span><a href="https://www.prognosysmedical.com" target="_blank">prognosysmedical.com</a></span></div>
+      </div>
+      <div class="website-link"><i class="fas fa-building"></i> <a href="https://www.prognosysmedical.com" target="_blank">www.prognosysmedical.com</a></div>
+    </div>
+
+    <!-- Sandeep Card -->
+    <div class="glass-card">
+      <div class="avatar-circle" id="sandeepAvatar">
+        <img src="images/sandeep.png" alt="Sandeep Kumar Yadav" onerror="this.onerror=null; this.parentElement.innerHTML = '<div class=\'initials-fallback\'>SY</div>';">
+      </div>
+      <div class="member-name">Sandeep Kumar Yadav</div>
+      <div class="designation"><i class="fas fa-chart-line"></i> Executive - Sales</div>
+      <div class="contact-details">
+        <div class="detail-item"><i class="fas fa-mobile-alt"></i><span><a href="tel:+919588027038">+91 95880 27038</a></span></div>
+        <div class="detail-item"><i class="fas fa-envelope"></i><span><a href="mailto:sandeep.y@prognosysmedical.com">sandeep.y@prognosysmedical.com</a></span></div>
+        <div class="detail-item"><i class="fas fa-globe"></i><span><a href="https://www.prognosysmedical.com" target="_blank">prognosysmedical.com</a></span></div>
+      </div>
+      <div class="website-link"><i class="fas fa-building"></i> <a href="https://www.prognosysmedical.com" target="_blank">www.prognosysmedical.com</a></div>
+    </div>
+  </div>
+  <footer><i class="fas fa-phone-volume"></i> For urgent service & sales inquiries, reach out directly via phone or email.</footer>
+</div>
+
+<!-- 3D Floating Pill Button -->
+<button class="float-pill" id="raiseRequestBtn"><i class="fas fa-headset"></i> Raise Service Request <i class="fas fa-chevron-right"></i></button>
+
+<!-- SMALL SETTINGS BUTTON (BOTTOM LEFT) -->
+<button class="float-pill settings-pill" id="settingsBtn" title="Configuration"><i class="fas fa-cog"></i></button>
+
+<!-- MODAL: INITIAL HOSPITAL INFO -->
+<div id="initialInfoModal" class="modal-overlay">
+  <div class="modal-card">
+    <h3><i class="fas fa-hospital-user"></i> Hospital / Institute Details</h3>
+    <p style="margin-bottom: 1rem;">Please provide your institution information (saved locally for future requests)</p>
+    <div class="req-field">
+      <label>🏥 Hospital / Institute Name *</label>
+      <input type="text" id="hospitalNameInput" placeholder="e.g., City Care Hospital">
+    </div>
+    <div class="req-field">
+      <label>📍 Google Maps Location Link *</label>
+      <input type="url" id="mapLinkInput" placeholder="https://maps.app.goo.gl/...">
+    </div>
+    <button id="saveHospitalBtn">Save & Continue</button>
+    <div id="initError" style="color:red; font-size:0.8rem; margin-top:12px;"></div>
+  </div>
+</div>
+
+<!-- MODAL: SERVICE REQUEST FORM -->
+<div id="serviceModal" class="modal-overlay">
+  <div class="modal-card" style="max-width: 550px;">
+    <h3><i class="fas fa-tools"></i> Service Request</h3>
+    <div class="req-field">
+      <label>🏥 Hospital / Institute</label>
+      <div class="hospital-edit-row">
+        <span id="displayHospitalName">-</span>
+        <button type="button" class="icon-btn" id="editHospitalBtn"><i class="fas fa-pencil-alt"></i></button>
+      </div>
+      <div style="font-size:0.8rem; margin-top:4px;" id="displayMapLinkShort"></div>
+    </div>
+    <div class="req-field">
+      <label>📋 Problem Description *</label>
+      <textarea id="problemDesc" rows="3" placeholder="Describe the issue in detail..."></textarea>
+    </div>
+    <div class="req-field">
+      <label>👤 Your Name *</label>
+      <input type="text" id="requesterName" placeholder="Full name">
+    </div>
+    <div class="req-field">
+      <label>📞 Mobile Number *</label>
+      <input type="tel" id="requesterMobile" placeholder="+91 XXXXXXXXXX">
+    </div>
+    <div style="display: flex; gap: 12px; justify-content: flex-end;">
+      <button id="cancelRequestBtn" style="background:#aaa;">Cancel</button>
+      <button id="submitRequestBtn" style="background:#2c7da0;">Submit Request</button>
+    </div>
+    <div id="serviceFormError" style="color:#d9534f; margin-top:12px; font-size:0.85rem;"></div>
+  </div>
+</div>
+
+<!-- MODAL: PASSWORD PROMPT -->
+<div id="passwordModal" class="modal-overlay">
+  <div class="modal-card" style="max-width: 400px;">
+    <h3><i class="fas fa-lock"></i> Settings Locked</h3>
+    <p style="margin-bottom: 1rem; font-size:0.9rem; color:#48627a;">Enter password to access configuration.</p>
+    <div class="req-field">
+      <label>🔑 Password</label>
+      <input type="password" id="configPasswordInput" placeholder="Enter password" autocomplete="off">
+    </div>
+    <div style="display: flex; gap: 12px; justify-content: flex-end;">
+      <button id="cancelPasswordBtn" style="background:#aaa;">Cancel</button>
+      <button id="unlockConfigBtn">Unlock</button>
+    </div>
+    <div id="passwordError" style="color:#d9534f; margin-top:12px; font-size:0.85rem;"></div>
+  </div>
+</div>
+
+<!-- MODAL: CONFIGURATION -->
+<div id="configModal" class="modal-overlay">
+  <div class="modal-card config-card">
+    <h3><i class="fas fa-sliders-h"></i> Configuration</h3>
+    <p style="font-size:0.8rem; color:#5b7a94;">All values are stored locally on this device.</p>
+
+    <div class="config-section-title"><i class="fab fa-whatsapp"></i> WhatsApp Cloud API</div>
+    <div class="req-field">
+      <label>WhatsApp Access Token (Meta)</label>
+      <input type="text" id="cfgWaToken" placeholder="EAAG..." autocomplete="off">
+    </div>
+    <div class="req-field">
+      <label>WhatsApp Phone Number ID</label>
+      <input type="text" id="cfgWaPhoneId" placeholder="123456789012345" autocomplete="off">
+    </div>
+    <div class="req-field">
+      <label>WhatsApp Sender Phone (not used)</label>
+      <input type="text" id="cfgWaSender" placeholder="+91 XXXXXXXXXX" autocomplete="off">
+    </div>
+    <div class="req-field">
+      <label>WhatsApp Template Name</label>
+      <input type="text" id="cfgWaTemplate" placeholder="service_request" autocomplete="off">
+    </div>
+    <div class="req-field">
+      <label>WhatsApp Template Language (e.g. en, en_US)</label>
+      <input type="text" id="cfgWaLang" placeholder="en" autocomplete="off">
+    </div>
+
+    <div class="config-section-title"><i class="fas fa-users"></i> WhatsApp Recipient Numbers</div>
+    <div class="add-row">
+      <input type="tel" id="newWaNumber" placeholder="+91 98765 43210">
+      <button type="button" id="addWaNumberBtn" class="add-btn" title="Add number"><i class="fas fa-plus"></i></button>
+    </div>
+    <ul class="numbers-list" id="waNumbersList"></ul>
+
+    <div class="config-section-title"><i class="fab fa-telegram"></i> Telegram Chat IDs</div>
+    <div class="add-row">
+      <input type="text" id="newTgId" placeholder="878604830">
+      <button type="button" id="addTgIdBtn" class="add-btn" title="Add chat id"><i class="fas fa-plus"></i></button>
+    </div>
+    <ul class="numbers-list" id="tgIdsList"></ul>
+
+    <div class="config-section-title"><i class="fas fa-history"></i> Saved Requests (local)</div>
+    <div id="historyList" class="history-list"></div>
+    <button type="button" id="clearHistoryBtn" class="small-btn">Clear History</button>
+
+    <!-- ===== BACKUP & RESTORE SECTION ===== -->
+    <div class="config-section-title"><i class="fas fa-database"></i> Backup &amp; Restore (JSON)</div>
+    <p style="font-size:0.78rem; color:#5b7a94; margin-bottom:10px; line-height:1.5;">
+      Saving the configuration automatically sends a full JSON backup to all Telegram Chat IDs.
+      If device data / cache is ever cleared, upload that JSON file here to restore everything instantly.
+    </p>
+    <div class="backup-row">
+      <button type="button" id="sendBackupBtn" class="backup-btn">
+        <i class="fas fa-paper-plane"></i> Send Backup to Telegram
+      </button>
+      <button type="button" id="loadJsonBtn" class="backup-btn alt">
+        <i class="fas fa-file-import"></i> Load JSON File
+      </button>
+      <input type="file" id="configFileInput" accept=".json,application/json" style="display:none;">
+    </div>
+    <div id="backupMsg" class="backup-msg"></div>
+
+    <div style="display:flex; gap:12px; justify-content:flex-end; margin-top:1.6rem;">
+      <button type="button" id="closeConfigBtn" style="background:#aaa;">Close</button>
+      <button type="button" id="saveConfigBtn">Save Configuration</button>
+    </div>
+    <div id="configMsg" style="margin-top:10px; font-size:0.85rem;"></div>
+  </div>
+</div>
+
+<script>
+  /* =========================================================
+     CONSTANTS
+     ========================================================= */
+  const TELEGRAM_BOT_TOKEN = '7941135502:AAHz-KGvAAoZEhPVgfVKw3zFbkaB0_Pi5rM';
+  const DEFAULT_TG_IDS = ['878604830'];
+
+  const STORAGE_KEY      = 'prognosys_hospital_data';
+  const WA_CONFIG_KEY    = 'prognosys_wa_config';
+  const WA_NUMBERS_KEY   = 'prognosys_wa_numbers';
+  const TG_IDS_KEY       = 'prognosys_tg_ids';
+  const HISTORY_KEY      = 'prognosys_request_history';
+
+  const SETTINGS_PASSWORD = '23012002';
+
+  /* =========================================================
+     GENERIC STORAGE HELPERS (safe)
+     ========================================================= */
+  function readJSON(key, fallback) {
+    try {
+      const raw = localStorage.getItem(key);
+      if (!raw) return fallback;
+      const parsed = JSON.parse(raw);
+      return (parsed === null || parsed === undefined) ? fallback : parsed;
+    } catch (e) { return fallback; }
+  }
+
+  function writeJSON(key, value) {
+    try { localStorage.setItem(key, JSON.stringify(value)); } catch (e) { console.warn('Storage error', e); }
+  }
+
+  /* =========================================================
+     HOSPITAL DATA
+     ========================================================= */
+  function getHospitalData() {
+    const data = localStorage.getItem(STORAGE_KEY);
+    if (data) {
+      try { return JSON.parse(data); } catch(e) { return null; }
+    }
+    return null;
+  }
+
+  function saveHospitalData(hospitalName, mapLink) {
+    const obj = { hospitalName: String(hospitalName || '').trim(), mapLink: String(mapLink || '').trim() };
+    localStorage.setItem(STORAGE_KEY, JSON.stringify(obj));
+    return obj;
+  }
+
+  function checkInitialDataAndShow() {
+    const existing = getHospitalData();
+    if (!existing || !existing.hospitalName || !existing.mapLink) {
+      document.getElementById('initialInfoModal').classList.add('active');
+    }
+  }
+
+  function updateServiceModalFields() {
+    const data = getHospitalData();
+    if (data) {
+      document.getElementById('displayHospitalName').innerText = data.hospitalName || 'Not set';
+      const mapShort = data.mapLink ? (data.mapLink.length > 50 ? data.mapLink.substring(0, 47)+'...' : data.mapLink) : 'No map link';
+      document.getElementById('displayMapLinkShort').innerHTML = `<i class="fas fa-map-marker-alt"></i> Map: <a href="${data.mapLink}" target="_blank">${mapShort}</a>`;
+    } else {
+      document.getElementById('displayHospitalName').innerText = 'No hospital data';
+      document.getElementById('displayMapLinkShort').innerHTML = '';
+    }
+  }
+
+  function editHospitalDetails() {
+    const current = getHospitalData();
+    let newHospital = prompt("Enter Hospital / Institute Name:", current ? current.hospitalName : "");
+    if (newHospital !== null && newHospital.trim() !== "") {
+      let newMap = prompt("Enter Google Maps Location Link:", current ? current.mapLink : "");
+      if (newMap !== null && newMap.trim() !== "") {
+        saveHospitalData(newHospital.trim(), newMap.trim());
+        updateServiceModalFields();
+        alert("Hospital details updated successfully!");
+      } else if (newMap === "") {
+        alert("Map link cannot be empty. Update cancelled.");
+      }
+    } else if (newHospital === "") {
+      alert("Hospital name cannot be empty.");
+    }
+  }
+
+  /* =========================================================
+     CONFIG STORAGE HELPERS
+     ========================================================= */
+  function getWaConfig() {
+    return readJSON(WA_CONFIG_KEY, {
+      token: '', phoneNumberId: '', senderPhone: '',
+      templateName: '', templateLanguage: 'en'
+    });
+  }
+
+  function getWaNumbers() {
+    const arr = readJSON(WA_NUMBERS_KEY, []);
+    return Array.isArray(arr) ? arr : [];
+  }
+
+  function getTgIds() {
+    const arr = readJSON(TG_IDS_KEY, DEFAULT_TG_IDS);
+    return (Array.isArray(arr) && arr.length) ? arr : DEFAULT_TG_IDS.slice();
+  }
+
+  function getHistory() {
+    const arr = readJSON(HISTORY_KEY, []);
+    return Array.isArray(arr) ? arr : [];
+  }
+
+  function addHistory(entry) {
+    const arr = getHistory();
+    arr.unshift(entry);
+    writeJSON(HISTORY_KEY, arr.slice(0, 100));
+  }
+
+  /* =========================================================
+     UTILITIES
+     ========================================================= */
+  function normalizePhone(num) {
+    let digits = String(num || '').replace(/\D/g, '');
+    if (digits.length === 10) digits = '91' + digits;   // default India
+    return digits;
+  }
+
+  // WhatsApp template params: no newlines / tabs / 4+ consecutive spaces
+  function sanitizeWaParam(str) {
+    const out = String(str == null ? '' : str)
+      .replace(/[\r\n\t]+/g, ' ')
+      .replace(/ {4,}/g, '   ')
+      .trim();
+    return out.length ? out : '-';
+  }
+
+  function escapeHtml(str) {
+    if (!str) return '';
+    return String(str).replace(/[&<>]/g, function(m) {
+      if (m === '&') return '&amp;';
+      if (m === '<') return '&lt;';
+      if (m === '>') return '&gt;';
+      return m;
+    });
+  }
+
+  /* =========================================================
+     TELEGRAM
+     ========================================================= */
+  async function sendTelegramMessage(chatId, message) {
+    const url = `https://api.telegram.org/bot${TELEGRAM_BOT_TOKEN}/sendMessage`;
+    const res = await fetch(url, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ chat_id: chatId, text: message, parse_mode: 'HTML' })
+    });
+    const data = await res.json().catch(() => ({}));
+    if (!data.ok) throw new Error(data.description || 'Telegram send failed');
+    return data;
+  }
+
+  /* --- NEW: send a real file (document) to Telegram --- */
+  async function sendTelegramDocument(chatId, filename, content, caption) {
+    const url = `https://api.telegram.org/bot${TELEGRAM_BOT_TOKEN}/sendDocument`;
+    const form = new FormData();
+    form.append('chat_id', String(chatId));
+    if (caption) form.append('caption', caption);
+    form.append('document', new Blob([content], { type: 'application/json' }), filename);
+    const res = await fetch(url, { method: 'POST', body: form });
+    const data = await res.json().catch(() => ({}));
+    if (!data.ok) throw new Error(data.description || 'Telegram document send failed');
+    return data;
+  }
+
+  /* =========================================================
+     CONFIG BACKUP / RESTORE (JSON)   <<< NEW SECTION >>>
+     ========================================================= */
+  const BACKUP_FILE_TYPE = 'prognosys-config-backup';
+  const BACKUP_VERSION   = 1;
+
+  /* Build the complete configuration snapshot */
+  function buildConfigSnapshot() {
+    return {
+      type: BACKUP_FILE_TYPE,
+      version: BACKUP_VERSION,
+      app: 'Prognosys Medical Systems - Service Support',
+      exportedAt: new Date().toLocaleString('en-IN', { timeZone: 'Asia/Kolkata' }),
+      hospitalData: getHospitalData(),
+      waConfig: getWaConfig(),
+      waNumbers: getWaNumbers(),
+      tgIds: getTgIds(),
+      history: getHistory()
+    };
+  }
+
+  function backupFileName() {
+    const d = new Date();
+    const pad = n => String(n).padStart(2, '0');
+    return 'prognosys-config-' + d.getFullYear() + pad(d.getMonth() + 1) + pad(d.getDate())
+         + '-' + pad(d.getHours()) + pad(d.getMinutes()) + '.json';
+  }
+
+  function setBackupMsg(html, color) {
+    const el = document.getElementById('backupMsg');
+    if (!el) return;
+    el.style.color = color || '#1a7f37';
+    el.innerHTML = html;
+  }
+
+  /* Send the JSON backup file to every Telegram chat id */
+  async function backupConfigToTelegram() {
+    const tgIds = getTgIds();
+    if (!tgIds.length) {
+      setBackupMsg('⚠️ No Telegram Chat ID configured — backup not sent.', '#b8860b');
+      return { ok: 0, total: 0 };
+    }
+
+    const snapshot = buildConfigSnapshot();
+    const jsonStr  = JSON.stringify(snapshot, null, 2);
+    const filename = backupFileName();
+    const caption  =
+      '🗂 Prognosys Configuration Backup\n' +
+      '🕒 ' + snapshot.exportedAt + '\n' +
+      '🏥 ' + ((snapshot.hospitalData && snapshot.hospitalData.hospitalName) || 'No hospital set');
+
+    const btn = document.getElementById('sendBackupBtn');
+    let oldHtml = '';
+    if (btn) {
+      oldHtml = btn.innerHTML;
+      btn.disabled = true;
+      btn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Sending...';
+    }
+    setBackupMsg('<i class="fas fa-spinner fa-spin"></i> Sending JSON backup to Telegram...', '#5b7a94');
+
+    let results = [];
+    try {
+      results = await Promise.allSettled(
+        tgIds.map(id => sendTelegramDocument(id, filename, jsonStr, caption))
+      );
+    } catch (e) {
+      results = [{ status: 'rejected', reason: e }];
+    }
+
+    if (btn) { btn.disabled = false; btn.innerHTML = oldHtml; }
+
+    let ok = 0;
+    const errs = [];
+    results.forEach(r => {
+      if (r.status === 'fulfilled') ok++;
+      else errs.push((r.reason && r.reason.message) ? r.reason.message : 'failed');
+    });
+
+    if (ok === tgIds.length) {
+      setBackupMsg('✅ Backup JSON sent to Telegram (' + ok + '/' + tgIds.length + ').<br>📄 File: <b>' + escapeHtml(filename) + '</b>', '#1a7f37');
+    } else if (ok > 0) {
+      setBackupMsg('⚠️ Backup sent to ' + ok + '/' + tgIds.length + '.<br>' + escapeHtml(errs.slice(0, 2).join(' | ')), '#b8860b');
+    } else {
+      setBackupMsg('❌ Backup failed. ' + escapeHtml(errs.slice(0, 2).join(' | ')), '#c0392b');
+    }
+    return { ok: ok, total: tgIds.length };
+  }
+
+  /* Apply a parsed backup object onto localStorage */
+  function applyConfigSnapshot(obj) {
+    if (!obj || typeof obj !== 'object' || Array.isArray(obj)) {
+      throw new Error('Invalid JSON structure.');
+    }
+    if (obj.type && obj.type !== BACKUP_FILE_TYPE) {
+      throw new Error('This file is not a Prognosys configuration backup.');
+    }
+    if (!obj.waConfig && !obj.waNumbers && !obj.tgIds && !obj.hospitalData) {
+      throw new Error('No configuration data found inside the file.');
+    }
+
+    /* 1. WhatsApp API config */
+    if (obj.waConfig && typeof obj.waConfig === 'object') {
+      writeJSON(WA_CONFIG_KEY, {
+        token:            String(obj.waConfig.token || ''),
+        phoneNumberId:    String(obj.waConfig.phoneNumberId || ''),
+        senderPhone:      String(obj.waConfig.senderPhone || ''),
+        templateName:     String(obj.waConfig.templateName || ''),
+        templateLanguage: String(obj.waConfig.templateLanguage || 'en')
+      });
+    }
+
+    /* 2. WhatsApp recipient numbers */
+    if (Array.isArray(obj.waNumbers)) {
+      writeJSON(WA_NUMBERS_KEY, obj.waNumbers
+        .filter(n => typeof n === 'string' && n.trim())
+        .map(n => n.trim()));
+    }
+
+    /* 3. Telegram chat IDs */
+    if (Array.isArray(obj.tgIds)) {
+      const ids = obj.tgIds
+        .filter(x => (typeof x === 'string' || typeof x === 'number') && String(x).trim())
+        .map(x => String(x).trim());
+      if (ids.length) writeJSON(TG_IDS_KEY, ids);
+    }
+
+    /* 4. Hospital / Institute data */
+    if (obj.hospitalData && typeof obj.hospitalData === 'object' && obj.hospitalData.hospitalName) {
+      saveHospitalData(obj.hospitalData.hospitalName, obj.hospitalData.mapLink || '');
+    }
+
+    /* 5. Request history (optional) */
+    if (Array.isArray(obj.history)) {
+      writeJSON(HISTORY_KEY, obj.history.slice(0, 100));
+    }
+  }
+
+  /* Read a user-selected .json file and restore everything */
+  function handleConfigFileLoad(file) {
+    if (!file) return;
+    const reader = new FileReader();
+
+    reader.onload = function (e) {
+      let parsed;
+      try {
+        parsed = JSON.parse(e.target.result);
+      } catch (err) {
+        setBackupMsg('❌ Invalid JSON file. Please select a valid backup file.', '#c0392b');
+        return;
+      }
+
+      if (!confirm('This will overwrite the configuration stored on this device.\n\nContinue?')) {
+        setBackupMsg('ℹ️ Restore cancelled.', '#5b7a94');
+        return;
+      }
+
+      try {
+        applyConfigSnapshot(parsed);
+        loadConfigIntoForm();        // refresh all fields + lists
+        updateServiceModalFields();  // refresh service request modal
+        setBackupMsg('✅ Configuration restored successfully from <b>' + escapeHtml(file.name) + '</b>', '#1a7f37');
+      } catch (err) {
+        setBackupMsg('❌ ' + escapeHtml(err.message || 'Restore failed.'), '#c0392b');
+      }
+    };
+
+    reader.onerror = function () {
+      setBackupMsg('❌ Could not read the selected file.', '#c0392b');
+    };
+
+    reader.readAsText(file);
+  }
+
+  /* =========================================================
+     WHATSAPP CLOUD API
+     ========================================================= */
+  async function sendWhatsAppMessage(to, params) {
+    const cfg = getWaConfig();
+    if (!cfg.token || !cfg.phoneNumberId || !cfg.templateName) {
+      throw new Error('WhatsApp not configured');
+    }
+    const url = `https://graph.facebook.com/v21.0/${encodeURIComponent(cfg.phoneNumberId)}/messages`;
+    const body = {
+      messaging_product: 'whatsapp',
+      to: to,
+      type: 'template',
+      template: {
+        name: cfg.templateName,
+        language: { code: cfg.templateLanguage || 'en' },
+        components: [
+          {
+            type: 'body',
+            parameters: params.map(p => ({ type: 'text', text: p }))
+          }
+        ]
+      }
+    };
+    const res = await fetch(url, {
+      method: 'POST',
+      headers: {
+        'Authorization': `Bearer ${cfg.token}`,
+        'Content-Type': 'application/json'
+      },
+      body: JSON.stringify(body)
+    });
+    const data = await res.json().catch(() => ({}));
+    if (!res.ok) {
+      const msg = (data && data.error && data.error.message) ? data.error.message : 'WhatsApp send failed';
+      throw new Error(msg);
+    }
+    return data;
+  }
+
+  /* =========================================================
+     SUBMIT SERVICE REQUEST
+     ========================================================= */
+  async function submitServiceRequest() {
+    const hospitalData = getHospitalData();
+    if (!hospitalData || !hospitalData.hospitalName) {
+      alert("Hospital information missing. Please refresh and set hospital details.");
+      return;
+    }
+
+    const problem = document.getElementById('problemDesc').value.trim();
+    const name    = document.getElementById('requesterName').value.trim();
+    const mobile  = document.getElementById('requesterMobile').value.trim();
+    const errorDiv = document.getElementById('serviceFormError');
+    errorDiv.innerHTML = '';
+
+    if (!name)   { errorDiv.innerHTML = '❌ Name is mandatory.'; return; }
+    if (!mobile) { errorDiv.innerHTML = '❌ Mobile number is mandatory.'; return; }
+    if (!problem){ errorDiv.innerHTML = '❌ Please describe the problem.'; return; }
+    if (mobile.replace(/\D/g,'').length < 8) { errorDiv.innerHTML = '❌ Please enter a valid mobile number.'; return; }
+
+    const timestamp = new Date().toLocaleString('en-IN', { timeZone: 'Asia/Kolkata' });
+
+    /* ---- Telegram text (HTML) ---- */
+    const telegramMessage =
+`🔔 <b>NEW SERVICE REQUEST</b> 🔔
+🏥 <b>Hospital:</b> ${escapeHtml(hospitalData.hospitalName)}
+📍 <b>Map Link:</b> <a href="${hospitalData.mapLink}">${hospitalData.mapLink}</a>
+📋 <b>Problem:</b> ${escapeHtml(problem)}
+👤 <b>Requester:</b> ${escapeHtml(name)}
+📞 <b>Mobile:</b> ${escapeHtml(mobile)}
+🕒 <b>Time:</b> ${timestamp}`;
+
+    /* ---- WhatsApp template body params {{1}}..{{6}} ---- */
+    const waParams = [
+      sanitizeWaParam(hospitalData.hospitalName),  // {{1}}
+      sanitizeWaParam(hospitalData.mapLink),       // {{2}}
+      sanitizeWaParam(problem),                    // {{3}}
+      sanitizeWaParam(name),                       // {{4}}
+      sanitizeWaParam(mobile),                     // {{5}}
+      sanitizeWaParam(timestamp)                   // {{6}}
+    ];
+
+    const tgIds  = getTgIds();
+    const waNums = getWaNumbers();
+
+    const submitBtn = document.getElementById('submitRequestBtn');
+    const originalText = submitBtn.innerText;
+    submitBtn.disabled = true;
+    submitBtn.innerText = "Sending...";
+
+    let tgOk = 0, waOk = 0;
+    const errs = [];
+
+    /* ---- Telegram ---- */
+    if (tgIds.length) {
+      const tgResults = await Promise.allSettled(tgIds.map(id => sendTelegramMessage(id, telegramMessage)));
+      tgResults.forEach(r => {
+        if (r.status === 'fulfilled') tgOk++;
+        else errs.push('Telegram: ' + (r.reason && r.reason.message ? r.reason.message : 'failed'));
+      });
+    }
+
+    /* ---- WhatsApp ---- */
+    if (waNums.length) {
+      const waResults = await Promise.allSettled(waNums.map(n => sendWhatsAppMessage(normalizePhone(n), waParams)));
+      waResults.forEach(r => {
+        if (r.status === 'fulfilled') waOk++;
+        else errs.push('WhatsApp: ' + (r.reason && r.reason.message ? r.reason.message : 'failed'));
+      });
+    }
+
+    /* ---- Save to local history ---- */
+    addHistory({
+      hospital: hospitalData.hospitalName,
+      mapLink: hospitalData.mapLink,
+      problem: problem,
+      name: name,
+      mobile: mobile,
+      time: timestamp,
+      tgOk: tgOk, tgTotal: tgIds.length,
+      waOk: waOk, waTotal: waNums.length
+    });
+
+    submitBtn.disabled = false;
+    submitBtn.innerText = originalText;
+
+    if (tgOk + waOk > 0) {
+      let msg = '✅ Request submitted successfully!\n\n📨 Delivery Report\n';
+      msg += `Telegram: ${tgOk}/${tgIds.length}\n`;
+      msg += `WhatsApp: ${waOk}/${waNums.length}`;
+      if (errs.length) msg += `\n\n⚠️ Some deliveries failed:\n${errs.slice(0,3).join('\n')}`;
+      alert(msg);
+      document.getElementById('problemDesc').value = '';
+      document.getElementById('requesterName').value = '';
+      document.getElementById('requesterMobile').value = '';
+      document.getElementById('serviceModal').classList.remove('active');
+    } else {
+      let msg = '⚠️ Submission failed. Please check your network or configuration.';
+      if (errs.length) msg += `\n\n${errs.slice(0,3).join('\n')}`;
+      alert(msg);
+    }
+  }
+
+  /* =========================================================
+     MODAL ELEMENTS
+     ========================================================= */
+  const modals = {
+    initial:  document.getElementById('initialInfoModal'),
+    service:  document.getElementById('serviceModal'),
+    password: document.getElementById('passwordModal'),
+    config:   document.getElementById('configModal')
+  };
+
+  function openServiceModal() {
+    const data = getHospitalData();
+    if (!data || !data.hospitalName) {
+      alert("Please set hospital details first.");
+      modals.initial.classList.add('active');
+      return;
+    }
+    updateServiceModalFields();
+    document.getElementById('problemDesc').value = '';
+    document.getElementById('requesterName').value = '';
+    document.getElementById('requesterMobile').value = '';
+    document.getElementById('serviceFormError').innerHTML = '';
+    modals.service.classList.add('active');
+  }
+
+  function closeAllModals() {
+    Object.values(modals).forEach(m => m.classList.remove('active'));
+  }
+
+  function saveInitialHospital() {
+    const hospital = document.getElementById('hospitalNameInput').value.trim();
+    const mapLink = document.getElementById('mapLinkInput').value.trim();
+    const errorSpan = document.getElementById('initError');
+    errorSpan.innerText = '';
+    if (!hospital) { errorSpan.innerText = "Hospital name is required."; return; }
+    if (!mapLink) { errorSpan.innerText = "Google Maps location link is required."; return; }
+    if (!mapLink.startsWith('http')) { errorSpan.innerText = "Please enter a valid URL (https://...)."; return; }
+    saveHospitalData(hospital, mapLink);
+    closeAllModals();
+    alert("Hospital details saved! You can now raise service requests.");
+  }
+
+  /* =========================================================
+     SETTINGS / CONFIGURATION FLOW
+     ========================================================= */
+  function openPasswordPrompt() {
+    document.getElementById('configPasswordInput').value = '';
+    document.getElementById('passwordError').innerText = '';
+    modals.password.classList.add('active');
+    setTimeout(() => {
+      const inp = document.getElementById('configPasswordInput');
+      if (inp) inp.focus();
+    }, 150);
+  }
+
+  function unlockConfig() {
+    const val = document.getElementById('configPasswordInput').value;
+    if (val === SETTINGS_PASSWORD) {
+      modals.password.classList.remove('active');
+      document.getElementById('configPasswordInput').value = '';
+      loadConfigIntoForm();
+      modals.config.classList.add('active');
+    } else {
+      document.getElementById('passwordError').innerText = '❌ Incorrect password. Try again.';
+      document.getElementById('configPasswordInput').value = '';
+      document.getElementById('configPasswordInput').focus();
+    }
+  }
+
+  function loadConfigIntoForm() {
+    const c = getWaConfig();
+    document.getElementById('cfgWaToken').value    = c.token || '';
+    document.getElementById('cfgWaPhoneId').value  = c.phoneNumberId || '';
+    document.getElementById('cfgWaSender').value   = c.senderPhone || '';
+    document.getElementById('cfgWaTemplate').value = c.templateName || '';
+    document.getElementById('cfgWaLang').value     = c.templateLanguage || 'en';
+    document.getElementById('configMsg').innerText = '';
+    renderWaNumbers();
+    renderTgIds();
+    renderHistory();
+  }
+
+  /* --- MODIFIED: saves locally AND auto-sends JSON backup to Telegram --- */
+  function saveConfigValues() {
+    const cfg = {
+      token:            document.getElementById('cfgWaToken').value.trim(),
+      phoneNumberId:    document.getElementById('cfgWaPhoneId').value.trim(),
+      senderPhone:      document.getElementById('cfgWaSender').value.trim(),
+      templateName:     document.getElementById('cfgWaTemplate').value.trim(),
+      templateLanguage: document.getElementById('cfgWaLang').value.trim() || 'en'
+    };
+    writeJSON(WA_CONFIG_KEY, cfg);
+
+    const msg = document.getElementById('configMsg');
+    msg.style.color = '#1a7f37';
+    msg.innerText = '✅ Configuration saved locally.';
+    setTimeout(() => { msg.innerText = ''; }, 3000);
+
+    /* NEW: push a full JSON backup file to Telegram automatically */
+    backupConfigToTelegram();
+  }
+
+  /* ---------- WhatsApp numbers list ---------- */
+  function renderWaNumbers() {
+    const arr = getWaNumbers();
+    const ul = document.getElementById('waNumbersList');
+    ul.innerHTML = '';
+    if (!arr.length) {
+      const li = document.createElement('li');
+      li.innerHTML = '<span class="empty-note">No WhatsApp numbers added yet.</span>';
+      li.style.background = 'transparent';
+      li.style.padding = '0';
+      ul.appendChild(li);
+      return;
+    }
+    arr.forEach((num, idx) => {
+      const li = document.createElement('li');
+      const span = document.createElement('span');
+      span.className = 'num-text';
+      span.innerText = num;
+      const btn = document.createElement('button');
+      btn.type = 'button';
+      btn.className = 'remove-btn';
+      btn.innerHTML = '<i class="fas fa-trash"></i>';
+      btn.title = 'Remove';
+      btn.addEventListener('click', () => {
+        const list = getWaNumbers();
+        list.splice(idx, 1);
+        writeJSON(WA_NUMBERS_KEY, list);
+        renderWaNumbers();
+      });
+      li.appendChild(span);
+      li.appendChild(btn);
+      ul.appendChild(li);
+    });
+  }
+
+  function addWaNumber() {
+    const input = document.getElementById('newWaNumber');
+    const raw = input.value.trim();
+    if (!raw) return;
+    const digits = normalizePhone(raw);
+    if (digits.length < 10) { alert('Please enter a valid number with country code.'); return; }
+    const arr = getWaNumbers();
+    if (arr.some(n => normalizePhone(n) === digits)) { alert('This number is already added.'); return; }
+    arr.push(raw);
+    writeJSON(WA_NUMBERS_KEY, arr);
+    input.value = '';
+    renderWaNumbers();
+  }
+
+  /* ---------- Telegram chat IDs list ---------- */
+  function renderTgIds() {
+    const arr = getTgIds();
+    const ul = document.getElementById('tgIdsList');
+    ul.innerHTML = '';
+    if (!arr.length) {
+      const li = document.createElement('li');
+      li.innerHTML = '<span class="empty-note">No Telegram chat IDs added yet.</span>';
+      li.style.background = 'transparent';
+      li.style.padding = '0';
+      ul.appendChild(li);
+      return;
+    }
+    arr.forEach((id, idx) => {
+      const li = document.createElement('li');
+      const span = document.createElement('span');
+      span.className = 'num-text';
+      span.innerText = id;
+      const btn = document.createElement('button');
+      btn.type = 'button';
+      btn.className = 'remove-btn';
+      btn.innerHTML = '<i class="fas fa-trash"></i>';
+      btn.title = 'Remove';
+      btn.addEventListener('click', () => {
+        const list = getTgIds();
+        list.splice(idx, 1);
+        writeJSON(TG_IDS_KEY, list);
+        renderTgIds();
+      });
+      li.appendChild(span);
+      li.appendChild(btn);
+      ul.appendChild(li);
+    });
+  }
+
+  function addTgId() {
+    const input = document.getElementById('newTgId');
+    const raw = input.value.trim();
+    if (!raw) return;
+    const arr = getTgIds();
+    if (arr.indexOf(raw) !== -1) { alert('This chat ID is already added.'); return; }
+    arr.push(raw);
+    writeJSON(TG_IDS_KEY, arr);
+    input.value = '';
+    renderTgIds();
+  }
+
+  /* ---------- History ---------- */
+  function renderHistory() {
+    const arr = getHistory();
+    const box = document.getElementById('historyList');
+    if (!arr.length) {
+      box.innerHTML = '<div class="empty-note">No requests saved yet.</div>';
+      return;
+    }
+    box.innerHTML = arr.map(h => {
+      const waColor = (h.waTotal > 0 && h.waOk === h.waTotal) ? '#1a7f37' : (h.waOk > 0 ? '#b8860b' : '#c0392b');
+      const tgColor = (h.tgTotal > 0 && h.tgOk === h.tgTotal) ? '#1a7f37' : (h.tgOk > 0 ? '#b8860b' : '#c0392b');
+      return `
+        <div class="history-item">
+          <b>${escapeHtml(h.hospital || '-')}</b><br>
+          ${escapeHtml((h.problem || '-').substring(0, 90))}${(h.problem || '').length > 90 ? '…' : ''}<br>
+          👤 ${escapeHtml(h.name || '-')} &nbsp;·&nbsp; 📞 ${escapeHtml(h.mobile || '-')}<br>
+          🕒 ${escapeHtml(h.time || '-')}<br>
+          <span style="color:${waColor}">WhatsApp: ${h.waOk || 0}/${h.waTotal || 0}</span> &nbsp;·&nbsp;
+          <span style="color:${tgColor}">Telegram: ${h.tgOk || 0}/${h.tgTotal || 0}</span>
+        </div>`;
+    }).join('');
+  }
+
+  /* =========================================================
+     INIT
+     ========================================================= */
+  window.addEventListener("DOMContentLoaded", function() {
+    const bgImages =
+      ["images/2fc1.png",
+       "images/3nc3.png",
+       "images/3nc7.png",
+       "images/carm4.png",
+       "images/detector1.png",
+       "images/detector5.png",
+       "images/mobiledr3.png",
+       "images/mobiledr7.png",
+       "images/ultraportable5.png",
+       "images/3nc4.png",
+       "images/carm1.png",
+       "images/carm5.png",
+       "images/detector2.png",
+       "images/mobiledr.png",
+       "images/mobiledr4.png",
+       "images/ultraportable.png",
+       "images/3nc1.png",
+       "images/carm2.png",
+       "images/carm6.png",
+       "images/detector3.png",
+       "images/mobiledr1.png",
+       "images/mobiledr5.png",
+       "images/ultraportable1.png",
+       "images/3nc2.png",
+       "images/carm3.png",
+       "images/detector4.png",
+       "images/mobiledr2.png",
+       "images/mobiledr6.png",
+       "images/ultraportable4.png"].filter(p => p);
+
+    const bgLayer = document.getElementById('bgLayer');
+    if (bgImages.length) {
+      const randomImg = bgImages[Math.floor(Math.random() * bgImages.length)];
+      bgLayer.innerHTML = `<img src="${randomImg}" alt="bg" style="width:100%; height:100%; object-fit:cover;" onerror="this.parentElement.innerHTML='';">`;
+    }
+
+    // Profile fallbacks
+    const manojImg = document.querySelector('#manojAvatar img');
+    if (manojImg && manojImg.complete && manojImg.naturalWidth === 0) manojImg.dispatchEvent(new Event('error'));
+    const sandeepImg = document.querySelector('#sandeepAvatar img');
+    if (sandeepImg && sandeepImg.complete && sandeepImg.naturalWidth === 0) sandeepImg.dispatchEvent(new Event('error'));
+
+    const heroLogo = document.querySelector('.hero-logo');
+    if (heroLogo) heroLogo.onerror = () => heroLogo.style.display = 'none';
+
+    /* ----- Existing listeners ----- */
+    checkInitialDataAndShow();
+    document.getElementById('raiseRequestBtn').addEventListener('click', openServiceModal);
+    document.getElementById('saveHospitalBtn').addEventListener('click', saveInitialHospital);
+    document.getElementById('cancelRequestBtn').addEventListener('click', closeAllModals);
+    document.getElementById('submitRequestBtn').addEventListener('click', submitServiceRequest);
+    document.getElementById('editHospitalBtn').addEventListener('click', editHospitalDetails);
+
+    modals.initial.addEventListener('click', (e) => { if (e.target === modals.initial) closeAllModals(); });
+    modals.service.addEventListener('click', (e) => { if (e.target === modals.service) closeAllModals(); });
+
+    /* ----- Settings button ----- */
+    document.getElementById('settingsBtn').addEventListener('click', openPasswordPrompt);
+
+    /* ----- Password modal ----- */
+    document.getElementById('unlockConfigBtn').addEventListener('click', unlockConfig);
+    document.getElementById('cancelPasswordBtn').addEventListener('click', () => {
+      modals.password.classList.remove('active');
+    });
+    document.getElementById('configPasswordInput').addEventListener('keydown', (e) => {
+      if (e.key === 'Enter') { e.preventDefault(); unlockConfig(); }
+    });
+    modals.password.addEventListener('click', (e) => {
+      if (e.target === modals.password) modals.password.classList.remove('active');
+    });
+
+    /* ----- Config modal ----- */
+    document.getElementById('saveConfigBtn').addEventListener('click', saveConfigValues);
+    document.getElementById('closeConfigBtn').addEventListener('click', () => {
+      modals.config.classList.remove('active');
+    });
+    document.getElementById('addWaNumberBtn').addEventListener('click', addWaNumber);
+    document.getElementById('addTgIdBtn').addEventListener('click', addTgId);
+    document.getElementById('newWaNumber').addEventListener('keydown', (e) => {
+      if (e.key === 'Enter') { e.preventDefault(); addWaNumber(); }
+    });
+    document.getElementById('newTgId').addEventListener('keydown', (e) => {
+      if (e.key === 'Enter') { e.preventDefault(); addTgId(); }
+    });
+    document.getElementById('clearHistoryBtn').addEventListener('click', () => {
+      if (confirm('Clear all saved request history from this device?')) {
+        writeJSON(HISTORY_KEY, []);
+        renderHistory();
+      }
+    });
+    modals.config.addEventListener('click', (e) => {
+      if (e.target === modals.config) modals.config.classList.remove('active');
+    });
+
+    /* ----- NEW: Backup / Restore listeners ----- */
+    document.getElementById('sendBackupBtn').addEventListener('click', function () {
+      backupConfigToTelegram();
+    });
+
+    document.getElementById('loadJsonBtn').addEventListener('click', function () {
+      document.getElementById('configFileInput').click();
+    });
+
+    document.getElementById('configFileInput').addEventListener('change', function (e) {
+      const file = e.target.files && e.target.files[0];
+      handleConfigFileLoad(file);
+      e.target.value = ''; // allow selecting the same file again later
+    });
+  });
+</script>
+</body>
+</html>
