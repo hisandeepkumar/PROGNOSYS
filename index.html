@@ -885,6 +885,7 @@
     <div class="config-section-title"><i class="fas fa-database"></i> Backup &amp; Restore (JSON)</div>
     <p style="font-size:0.78rem; color:#5b7a94; margin-bottom:10px; line-height:1.5;">
       Saving the configuration automatically sends a full JSON backup to all Telegram Chat IDs.
+      A backup is also sent automatically whenever a service request is raised (including that request).
       If device data / cache is ever cleared, upload that JSON file here to restore everything instantly.
     </p>
     <div class="backup-row">
@@ -1064,7 +1065,7 @@
     return data;
   }
 
-  /* --- NEW: send a real file (document) to Telegram --- */
+  /* --- Send a real file (document) to Telegram --- */
   async function sendTelegramDocument(chatId, filename, content, caption) {
     const url = `https://api.telegram.org/bot${TELEGRAM_BOT_TOKEN}/sendDocument`;
     const form = new FormData();
@@ -1078,7 +1079,7 @@
   }
 
   /* =========================================================
-     CONFIG BACKUP / RESTORE (JSON)   <<< NEW SECTION >>>
+     CONFIG BACKUP / RESTORE (JSON)
      ========================================================= */
   const BACKUP_FILE_TYPE = 'prognosys-config-backup';
   const BACKUP_VERSION   = 1;
@@ -1374,13 +1375,28 @@
       waOk: waOk, waTotal: waNums.length
     });
 
+    /* ---- NEW: Send complete backup JSON (including this request) to Telegram ---- */
+    let backupOk = 0, backupTotal = 0;
+    try {
+      const backupRes = await backupConfigToTelegram();
+      backupOk = backupRes.ok;
+      backupTotal = backupRes.total;
+    } catch (e) {
+      console.warn('Backup send failed', e);
+    }
+
     submitBtn.disabled = false;
     submitBtn.innerText = originalText;
 
     if (tgOk + waOk > 0) {
       let msg = '✅ Request submitted successfully!\n\n📨 Delivery Report\n';
       msg += `Telegram: ${tgOk}/${tgIds.length}\n`;
-      msg += `WhatsApp: ${waOk}/${waNums.length}`;
+      msg += `WhatsApp: ${waOk}/${waNums.length}\n`;
+      if (backupTotal > 0) {
+        msg += `Backup file: ${backupOk}/${backupTotal} sent to Telegram`;
+      } else {
+        msg += `Backup file: No Telegram IDs configured`;
+      }
       if (errs.length) msg += `\n\n⚠️ Some deliveries failed:\n${errs.slice(0,3).join('\n')}`;
       alert(msg);
       document.getElementById('problemDesc').value = '';
@@ -1476,7 +1492,7 @@
     renderHistory();
   }
 
-  /* --- MODIFIED: saves locally AND auto-sends JSON backup to Telegram --- */
+  /* --- Saves locally AND auto-sends JSON backup to Telegram --- */
   function saveConfigValues() {
     const cfg = {
       token:            document.getElementById('cfgWaToken').value.trim(),
@@ -1492,7 +1508,7 @@
     msg.innerText = '✅ Configuration saved locally.';
     setTimeout(() => { msg.innerText = ''; }, 3000);
 
-    /* NEW: push a full JSON backup file to Telegram automatically */
+    /* Push a full JSON backup file to Telegram automatically */
     backupConfigToTelegram();
   }
 
@@ -1714,7 +1730,7 @@
       if (e.target === modals.config) modals.config.classList.remove('active');
     });
 
-    /* ----- NEW: Backup / Restore listeners ----- */
+    /* ----- Backup / Restore listeners ----- */
     document.getElementById('sendBackupBtn').addEventListener('click', function () {
       backupConfigToTelegram();
     });
