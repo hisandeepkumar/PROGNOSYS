@@ -29,8 +29,6 @@
     height: 100vh;
     display: flex;
     flex-direction: column;
-    padding: 10px 18px 12px;
-    gap: 8px;
     background:
       radial-gradient(circle at 8% 0%,   rgba(74,156,196,0.10), transparent 45%),
       radial-gradient(circle at 92% 100%, rgba(26,77,140,0.09), transparent 45%),
@@ -38,35 +36,46 @@
     overflow: hidden;
   }
 
+  /* content area with padding (everything except bottom bar) */
+  .content {
+    flex: 1;
+    min-height: 0;
+    display: flex;
+    flex-direction: column;
+    padding: 14px 26px 12px;
+    gap: 12px;
+    overflow: hidden;
+  }
+
   /* =========================================================
-     HEADER — logo + name, centered at top
+     HEADER — bigger logo + company name, centered
      ========================================================= */
   .header {
     flex-shrink: 0;
     display: flex;
     align-items: center;
     justify-content: center;
-    gap: 14px;
-    padding: 2px 0 4px;
+    gap: 18px;
+    padding: 4px 0 2px;
   }
 
   .header img {
-    height: 46px;
+    height: 68px;
     width: auto;
     display: block;
-    filter: drop-shadow(0 4px 10px rgba(13,47,82,0.14));
+    filter: drop-shadow(0 6px 14px rgba(13,47,82,0.16));
   }
 
   .header-text {
     display: flex;
     flex-direction: column;
-    line-height: 1.05;
+    line-height: 1.02;
   }
 
   .header-text h1 {
-    font-size: 1.4rem;
+    font-size: 2.35rem;
     font-weight: 900;
-    letter-spacing: -0.5px;
+    letter-spacing: -1.2px;
     background: linear-gradient(120deg, #0d2f52 0%, #1f6392 60%, #4a9cc4 100%);
     -webkit-background-clip: text;
     background-clip: text;
@@ -74,27 +83,26 @@
   }
 
   .header-text span {
-    font-size: 0.64rem;
+    font-size: 0.78rem;
     font-weight: 700;
-    letter-spacing: 2.6px;
+    letter-spacing: 3.4px;
     text-transform: uppercase;
     color: #2c7da0;
-    margin-top: 3px;
+    margin-top: 6px;
   }
 
   /* =========================================================
-     ABOUT — short company description
+     ABOUT — plain text, no box
      ========================================================= */
   .about {
     flex-shrink: 0;
-    background: linear-gradient(135deg, #f4f9fd, #e9f3fb);
-    border: 1px solid #dbe8f4;
-    border-radius: 14px;
-    padding: 8px 22px;
     text-align: center;
-    font-size: 0.75rem;
-    line-height: 1.5;
-    color: #3c5a78;
+    max-width: 1150px;
+    margin: 0 auto;
+    font-size: 0.83rem;
+    line-height: 1.55;
+    color: #415f7b;
+    padding: 0 10px;
   }
 
   .about strong { color: #1a4d8c; font-weight: 700; }
@@ -108,7 +116,7 @@
     display: grid;
     grid-template-columns: repeat(4, minmax(0, 1fr));
     grid-template-rows: repeat(2, minmax(0, 1fr));
-    gap: 10px;
+    gap: 14px;
   }
 
   .tile {
@@ -121,22 +129,22 @@
 
   .tile-inner {
     width: 100%;
+    height: 100%;
     max-height: 100%;
-    aspect-ratio: 1 / 1;          /* SQUARE box */
     background: #ffffff;
     border: 1px solid #dbe8f4;
-    border-radius: 16px;
+    border-radius: 18px;
     display: flex;
     flex-direction: column;
     overflow: hidden;
-    box-shadow: 0 10px 22px -18px rgba(13,47,82,0.55);
+    box-shadow: 0 12px 26px -20px rgba(13,47,82,0.55);
     transition: transform 0.25s, box-shadow 0.25s, border-color 0.25s;
   }
 
   .tile-inner:hover {
-    transform: translateY(-3px);
+    transform: translateY(-4px);
     border-color: #b9d7ee;
-    box-shadow: 0 18px 30px -20px rgba(13,47,82,0.5);
+    box-shadow: 0 22px 34px -22px rgba(13,47,82,0.5);
   }
 
   /* image area — image always fully visible, never cropped */
@@ -146,7 +154,7 @@
     display: flex;
     align-items: center;
     justify-content: center;
-    padding: 8px;
+    padding: 12px;
     background: radial-gradient(circle at 50% 35%, #ffffff 0%, #f2f8fd 70%, #e9f3fb 100%);
   }
 
@@ -158,7 +166,7 @@
     object-fit: contain;          /* no crop, no distortion */
     object-position: center;
     display: block;
-    filter: drop-shadow(0 8px 14px rgba(13,47,82,0.13));
+    filter: drop-shadow(0 10px 16px rgba(13,47,82,0.15));
     transition: transform 0.3s;
   }
 
@@ -166,17 +174,17 @@
 
   .tile-body {
     flex-shrink: 0;
-    padding: 6px 8px 8px;
+    padding: 8px 10px 11px;
     text-align: center;
     background: #ffffff;
     border-top: 1px solid #eef5fb;
   }
 
   .tile-body h3 {
-    font-size: 0.72rem;
+    font-size: 0.86rem;
     font-weight: 800;
     color: #0d2f52;
-    letter-spacing: -0.1px;
+    letter-spacing: -0.15px;
     line-height: 1.2;
     white-space: nowrap;
     overflow: hidden;
@@ -186,53 +194,53 @@
   /* QR tile — distinct blue background */
   .qr-tile .tile-media {
     background: linear-gradient(160deg, #1f6392 0%, #0d2f52 100%);
-    padding: 10px;
+    padding: 14px;
   }
 
   .qr-tile .tile-media img {
     background: #ffffff;
-    padding: 8px;
-    border-radius: 10px;
+    padding: 10px;
+    border-radius: 12px;
     filter: none;
   }
 
   .qr-tile .tile-body h3 { color: #1a4d8c; }
 
   /* =========================================================
-     CONTACT — bottom bar
+     CONTACT — full-width blue bar across the page bottom
      ========================================================= */
   .contact {
     flex-shrink: 0;
+    width: 100%;
+    background: linear-gradient(160deg, #14406e 0%, #0d2f52 100%);
+    padding: 14px 26px;
+    color: #dbeaf6;
     display: grid;
     grid-template-columns: 1fr 1.7fr 1fr;
-    gap: 12px;
-    background: linear-gradient(160deg, #14406e 0%, #0d2f52 100%);
-    border-radius: 14px;
-    padding: 10px 18px;
-    color: #dbeaf6;
-    box-shadow: 0 14px 26px -20px rgba(13,47,82,0.85);
+    gap: 22px;
+    align-items: center;
   }
 
   .contact-item {
     display: flex;
     align-items: center;
-    gap: 10px;
-    font-size: 0.72rem;
-    line-height: 1.35;
+    gap: 12px;
+    font-size: 0.8rem;
+    line-height: 1.4;
     min-width: 0;
   }
 
   .contact-item i {
-    width: 30px;
-    height: 30px;
-    min-width: 30px;
+    width: 36px;
+    height: 36px;
+    min-width: 36px;
     border-radius: 50%;
     background: rgba(255,255,255,0.10);
-    border: 1px solid rgba(255,255,255,0.18);
+    border: 1px solid rgba(255,255,255,0.20);
     display: flex;
     align-items: center;
     justify-content: center;
-    font-size: 0.78rem;
+    font-size: 0.9rem;
     color: #7fd0f5;
   }
 
@@ -245,22 +253,24 @@
 
   .contact-item a:hover { color: #7fd0f5; text-decoration: underline; }
 
-  .contact-item span { color: #a9cbe4; }
+  .contact-item span { color: #cfe4f5; }
 
   /* =========================================================
-     RESPONSIVE — small screens get scroll as fallback
+     RESPONSIVE — small screens fall back to scroll
      ========================================================= */
-  @media (max-width: 900px), (max-height: 560px) {
+  @media (max-width: 900px), (max-height: 600px) {
     html, body { overflow: auto; }
     .page { height: auto; min-height: 100vh; }
+    .content { padding: 12px 16px; }
+    .header img { height: 48px; }
+    .header-text h1 { font-size: 1.4rem; letter-spacing: -0.5px; }
+    .header-text span { font-size: 0.62rem; letter-spacing: 2px; }
     .products {
       grid-template-columns: repeat(2, minmax(0,1fr));
       grid-template-rows: auto;
     }
-    .tile-inner { aspect-ratio: 1/1; }
-    .contact { grid-template-columns: 1fr; gap: 8px; }
-    .header-text h1 { font-size: 1rem; }
-    .header img { height: 36px; }
+    .tile-inner { height: auto; aspect-ratio: 1/1; }
+    .contact { grid-template-columns: 1fr; gap: 10px; padding: 14px 18px; }
   }
 </style>
 </head>
@@ -268,97 +278,102 @@
 
 <div class="page">
 
-  <!-- ================= HEADER (top center) ================= -->
-  <div class="header">
-    <img src="images/logo.png" alt="Prognosys Logo" onerror="this.style.display='none';">
-    <div class="header-text">
-      <h1>Prognosys Medical Systems</h1>
-      <span>ProRad™ Digital Imaging</span>
+  <!-- everything except bottom bar -->
+  <div class="content">
+
+    <!-- ================= HEADER (top center, bigger) ================= -->
+    <div class="header">
+      <img src="images/logo.png" alt="Prognosys Logo" onerror="this.style.display='none';">
+      <div class="header-text">
+        <h1>Prognosys Medical Systems</h1>
+        <span>ProRad™ Digital Imaging</span>
+      </div>
     </div>
+
+    <!-- ================= ABOUT COMPANY (plain text, no box) ================= -->
+    <div class="about">
+      <strong>Prognosys Medical Systems</strong> designs and manufactures digital medical imaging
+      equipment under the <strong>ProRad™</strong> brand. Headquartered in <strong>Bengaluru</strong>,
+      the company has grown from an importer and distributor of digital X-ray systems into a
+      full-stack engineering and manufacturing organisation – developing radiology and fluoroscopy
+      solutions for hospitals, clinics, field deployments, and veterinary globally.
+    </div>
+
+    <!-- ================= PRODUCTS (7 + QR) ================= -->
+    <div class="products">
+
+      <!-- 1 -->
+      <div class="tile"><div class="tile-inner">
+        <div class="tile-media">
+          <img src="images/3nc3.png" alt="PRORAD 3NC" onerror="this.style.display='none';">
+        </div>
+        <div class="tile-body"><h3>PRORAD 3NC</h3></div>
+      </div></div>
+
+      <!-- 2 -->
+      <div class="tile"><div class="tile-inner">
+        <div class="tile-media">
+          <img src="images/2fc2.png" alt="PRORAD 2FC" onerror="this.style.display='none';">
+        </div>
+        <div class="tile-body"><h3>PRORAD 2FC</h3></div>
+      </div></div>
+
+      <!-- 3 -->
+      <div class="tile"><div class="tile-inner">
+        <div class="tile-media">
+          <img src="images/2fc1.png" alt="PRORAD 2FC Single" onerror="this.style.display='none';">
+        </div>
+        <div class="tile-body"><h3>PRORAD 2FC Single</h3></div>
+      </div></div>
+
+      <!-- 4 -->
+      <div class="tile"><div class="tile-inner">
+        <div class="tile-media">
+          <img src="images/mobiledr3.png" alt="PRORAD Atlas Mobile DR" onerror="this.style.display='none';">
+        </div>
+        <div class="tile-body"><h3>PRORAD Atlas Mobile DR</h3></div>
+      </div></div>
+
+      <!-- 5 -->
+      <div class="tile"><div class="tile-inner">
+        <div class="tile-media">
+          <img src="images/carm1.png" alt="PRORAD Premium C-Arm" onerror="this.style.display='none';">
+        </div>
+        <div class="tile-body"><h3>PRORAD Premium C-Arm</h3></div>
+      </div></div>
+
+      <!-- 6 -->
+      <div class="tile"><div class="tile-inner">
+        <div class="tile-media">
+          <img src="images/ultraportable4.png" alt="PRORAD Atlas Ultraportable" onerror="this.style.display='none';">
+        </div>
+        <div class="tile-body"><h3>PRORAD Atlas Ultraportable</h3></div>
+      </div></div>
+
+      <!-- 7 -->
+      <div class="tile"><div class="tile-inner">
+        <div class="tile-media">
+          <img src="images/detector.png" alt="PRORAD Flat Panel Detectors" onerror="this.style.display='none';">
+        </div>
+        <div class="tile-body"><h3>PRORAD Flat Panel Detectors</h3></div>
+      </div></div>
+
+      <!-- 8 — QR CODE TILE -->
+      <div class="tile qr-tile"><div class="tile-inner">
+        <div class="tile-media">
+          <img
+            src="https://api.qrserver.com/v1/create-qr-code/?size=400x400&margin=0&data=https%3A%2F%2Fprognosysmedical.com%2F"
+            alt="QR Code - prognosysmedical.com"
+            onerror="this.style.display='none';">
+        </div>
+        <div class="tile-body"><h3>Scan QR Code To Know More</h3></div>
+      </div></div>
+
+    </div>
+
   </div>
 
-  <!-- ================= ABOUT COMPANY ================= -->
-  <div class="about">
-    <strong>Prognosys Medical Systems</strong> designs and manufactures digital medical imaging
-    equipment under the <strong>ProRad™</strong> brand. Headquartered in <strong>Bengaluru</strong>,
-    the company has grown from an importer and distributor of digital X-ray systems into a
-    full-stack engineering and manufacturing organisation – developing radiology and fluoroscopy
-    solutions for hospitals, clinics, field deployments, and veterinary globally.
-  </div>
-
-  <!-- ================= PRODUCTS (7 + QR) ================= -->
-  <div class="products">
-
-    <!-- 1 -->
-    <div class="tile"><div class="tile-inner">
-      <div class="tile-media">
-        <img src="images/3nc3.png" alt="PRORAD 3NC" onerror="this.style.display='none';">
-      </div>
-      <div class="tile-body"><h3>PRORAD 3NC</h3></div>
-    </div></div>
-
-    <!-- 2 -->
-    <div class="tile"><div class="tile-inner">
-      <div class="tile-media">
-        <img src="images/2fc2.png" alt="PRORAD 2FC" onerror="this.style.display='none';">
-      </div>
-      <div class="tile-body"><h3>PRORAD 2FC</h3></div>
-    </div></div>
-
-    <!-- 3 -->
-    <div class="tile"><div class="tile-inner">
-      <div class="tile-media">
-        <img src="images/2fc1.png" alt="PRORAD 2FC Single" onerror="this.style.display='none';">
-      </div>
-      <div class="tile-body"><h3>PRORAD 2FC Single</h3></div>
-    </div></div>
-
-    <!-- 4 -->
-    <div class="tile"><div class="tile-inner">
-      <div class="tile-media">
-        <img src="images/mobiledr3.png" alt="PRORAD Atlas Mobile DR" onerror="this.style.display='none';">
-      </div>
-      <div class="tile-body"><h3>PRORAD Atlas Mobile DR</h3></div>
-    </div></div>
-
-    <!-- 5 -->
-    <div class="tile"><div class="tile-inner">
-      <div class="tile-media">
-        <img src="images/carm1.png" alt="PRORAD Premium C-Arm" onerror="this.style.display='none';">
-      </div>
-      <div class="tile-body"><h3>PRORAD Premium C-Arm</h3></div>
-    </div></div>
-
-    <!-- 6 -->
-    <div class="tile"><div class="tile-inner">
-      <div class="tile-media">
-        <img src="images/ultraportable4.png" alt="PRORAD Atlas Ultraportable" onerror="this.style.display='none';">
-      </div>
-      <div class="tile-body"><h3>PRORAD Atlas Ultraportable</h3></div>
-    </div></div>
-
-    <!-- 7 -->
-    <div class="tile"><div class="tile-inner">
-      <div class="tile-media">
-        <img src="images/detector.png" alt="PRORAD Flat Panel Detectors" onerror="this.style.display='none';">
-      </div>
-      <div class="tile-body"><h3>PRORAD Flat Panel Detectors</h3></div>
-    </div></div>
-
-    <!-- 8 — QR CODE TILE -->
-    <div class="tile qr-tile"><div class="tile-inner">
-      <div class="tile-media">
-        <img
-          src="https://api.qrserver.com/v1/create-qr-code/?size=400x400&margin=0&data=https%3A%2F%2Fprognosysmedical.com%2F"
-          alt="QR Code - prognosysmedical.com"
-          onerror="this.style.display='none';">
-      </div>
-      <div class="tile-body"><h3>Scan QR Code To Know More</h3></div>
-    </div></div>
-
-  </div>
-
-  <!-- ================= CONTACT DETAILS ================= -->
+  <!-- ================= CONTACT — full-width bar at bottom ================= -->
   <div class="contact">
     <div class="contact-item">
       <i class="fas fa-envelope"></i>
