@@ -17,7 +17,7 @@
   body {
     font-family: 'Inter', sans-serif;
     background: #ffffff;
-    color: #16283d;
+    color: #0f253f;
     -webkit-font-smoothing: antialiased;
     text-rendering: optimizeLegibility;
   }
@@ -30,19 +30,18 @@
     display: flex;
     flex-direction: column;
     background:
-      radial-gradient(circle at 8% 0%,   rgba(74,156,196,0.10), transparent 45%),
-      radial-gradient(circle at 92% 100%, rgba(26,77,140,0.09), transparent 45%),
-      #ffffff;
+      radial-gradient(circle at 6% 0%,   rgba(74,156,196,0.16), transparent 42%),
+      radial-gradient(circle at 94% 100%, rgba(26,77,140,0.14), transparent 42%),
+      linear-gradient(180deg, #ffffff 0%, #f6fbff 100%);
     overflow: hidden;
   }
 
-  /* content area with padding (everything except bottom bar) */
   .content {
     flex: 1;
     min-height: 0;
     display: flex;
     flex-direction: column;
-    padding: 14px 26px 12px;
+    padding: 14px 0 12px;   /* side padding moved to inner elements */
     gap: 12px;
     overflow: hidden;
   }
@@ -56,14 +55,14 @@
     align-items: center;
     justify-content: center;
     gap: 18px;
-    padding: 4px 0 2px;
+    padding: 4px 26px 2px;
   }
 
   .header img {
     height: 68px;
     width: auto;
     display: block;
-    filter: drop-shadow(0 6px 14px rgba(13,47,82,0.16));
+    filter: drop-shadow(0 6px 14px rgba(13,47,82,0.18));
   }
 
   .header-text {
@@ -73,10 +72,10 @@
   }
 
   .header-text h1 {
-    font-size: 2.35rem;
+    font-size: 2.4rem;
     font-weight: 900;
     letter-spacing: -1.2px;
-    background: linear-gradient(120deg, #0d2f52 0%, #1f6392 60%, #4a9cc4 100%);
+    background: linear-gradient(120deg, #0a2a4d 0%, #1a5b8e 55%, #2c8ab8 100%);
     -webkit-background-clip: text;
     background-clip: text;
     color: transparent;
@@ -84,8 +83,8 @@
 
   .header-text span {
     font-size: 0.78rem;
-    font-weight: 700;
-    letter-spacing: 3.4px;
+    font-weight: 800;
+    letter-spacing: 3.6px;
     text-transform: uppercase;
     color: #2c7da0;
     margin-top: 6px;
@@ -97,18 +96,18 @@
   .about {
     flex-shrink: 0;
     text-align: center;
-    max-width: 1150px;
+    max-width: 1080px;
     margin: 0 auto;
-    font-size: 0.83rem;
-    line-height: 1.55;
-    color: #415f7b;
-    padding: 0 10px;
+    font-size: 0.84rem;
+    line-height: 1.6;
+    color: #2f4d6b;
+    padding: 0 32px;
   }
 
-  .about strong { color: #1a4d8c; font-weight: 700; }
+  .about strong { color: #14406e; font-weight: 800; }
 
   /* =========================================================
-     PRODUCTS — 4 × 2 grid (7 products + QR)
+     PRODUCTS — 4 × 2 grid, with side margins
      ========================================================= */
   .products {
     flex: 1;
@@ -117,6 +116,8 @@
     grid-template-columns: repeat(4, minmax(0, 1fr));
     grid-template-rows: repeat(2, minmax(0, 1fr));
     gap: 14px;
+    /* left & right margin so the grid stays more centered */
+    padding: 4px 78px 0;
   }
 
   .tile {
@@ -128,23 +129,28 @@
   }
 
   .tile-inner {
+    position: relative;
     width: 100%;
     height: 100%;
     max-height: 100%;
     background: #ffffff;
-    border: 1px solid #dbe8f4;
+    border: 1px solid #cfe2f3;
     border-radius: 18px;
     display: flex;
     flex-direction: column;
     overflow: hidden;
-    box-shadow: 0 12px 26px -20px rgba(13,47,82,0.55);
+    box-shadow:
+      0 1px 2px rgba(13,47,82,0.05),
+      0 14px 28px -22px rgba(13,47,82,0.55);
     transition: transform 0.25s, box-shadow 0.25s, border-color 0.25s;
   }
 
   .tile-inner:hover {
     transform: translateY(-4px);
-    border-color: #b9d7ee;
-    box-shadow: 0 22px 34px -22px rgba(13,47,82,0.5);
+    border-color: #8fbfe0;
+    box-shadow:
+      0 1px 2px rgba(13,47,82,0.06),
+      0 22px 36px -22px rgba(13,47,82,0.55);
   }
 
   /* image area — image always fully visible, never cropped */
@@ -155,7 +161,7 @@
     align-items: center;
     justify-content: center;
     padding: 12px;
-    background: radial-gradient(circle at 50% 35%, #ffffff 0%, #f2f8fd 70%, #e9f3fb 100%);
+    background: linear-gradient(180deg, #ffffff 0%, #eef6fc 100%);
   }
 
   .tile-media img {
@@ -163,27 +169,45 @@
     max-height: 100%;
     width: auto;
     height: auto;
-    object-fit: contain;          /* no crop, no distortion */
+    object-fit: contain;
     object-position: center;
     display: block;
-    filter: drop-shadow(0 10px 16px rgba(13,47,82,0.15));
+    filter: drop-shadow(0 10px 16px rgba(13,47,82,0.16));
     transition: transform 0.3s;
   }
 
   .tile-inner:hover .tile-media img { transform: scale(1.05); }
+
+  /* Badge on top-left of tile */
+  .tile-badge {
+    position: absolute;
+    top: 10px;
+    left: 10px;
+    z-index: 3;
+    background: linear-gradient(145deg, #2c7da0, #14406e);
+    color: #ffffff;
+    font-size: 0.58rem;
+    font-weight: 800;
+    letter-spacing: 1.1px;
+    text-transform: uppercase;
+    padding: 5px 11px;
+    border-radius: 30px;
+    box-shadow: 0 6px 14px -8px rgba(13,47,82,0.9);
+    white-space: nowrap;
+  }
 
   .tile-body {
     flex-shrink: 0;
     padding: 8px 10px 11px;
     text-align: center;
     background: #ffffff;
-    border-top: 1px solid #eef5fb;
+    border-top: 1px solid #e2eef8;
   }
 
   .tile-body h3 {
     font-size: 0.86rem;
     font-weight: 800;
-    color: #0d2f52;
+    color: #0a2a4d;
     letter-spacing: -0.15px;
     line-height: 1.2;
     white-space: nowrap;
@@ -193,7 +217,7 @@
 
   /* QR tile — distinct blue background */
   .qr-tile .tile-media {
-    background: linear-gradient(160deg, #1f6392 0%, #0d2f52 100%);
+    background: linear-gradient(160deg, #1f6392 0%, #0a2a4d 100%);
     padding: 14px;
   }
 
@@ -204,7 +228,7 @@
     filter: none;
   }
 
-  .qr-tile .tile-body h3 { color: #1a4d8c; }
+  .qr-tile .tile-body h3 { color: #14406e; }
 
   /* =========================================================
      CONTACT — full-width blue bar across the page bottom
@@ -212,13 +236,14 @@
   .contact {
     flex-shrink: 0;
     width: 100%;
-    background: linear-gradient(160deg, #14406e 0%, #0d2f52 100%);
-    padding: 14px 26px;
-    color: #dbeaf6;
+    background: linear-gradient(160deg, #14406e 0%, #0a2a4d 100%);
+    padding: 14px 42px;
+    color: #e2eff9;
     display: grid;
     grid-template-columns: 1fr 1.7fr 1fr;
     gap: 22px;
     align-items: center;
+    border-top: 1px solid rgba(255,255,255,0.08);
   }
 
   .contact-item {
@@ -236,7 +261,7 @@
     min-width: 36px;
     border-radius: 50%;
     background: rgba(255,255,255,0.10);
-    border: 1px solid rgba(255,255,255,0.20);
+    border: 1px solid rgba(255,255,255,0.22);
     display: flex;
     align-items: center;
     justify-content: center;
@@ -258,16 +283,23 @@
   /* =========================================================
      RESPONSIVE — small screens fall back to scroll
      ========================================================= */
+  @media (max-width: 1100px) {
+    .products { padding: 4px 40px 0; }
+  }
+
   @media (max-width: 900px), (max-height: 600px) {
     html, body { overflow: auto; }
     .page { height: auto; min-height: 100vh; }
-    .content { padding: 12px 16px; }
+    .content { padding: 12px 0; }
+    .header { padding: 4px 16px 2px; gap: 12px; }
     .header img { height: 48px; }
     .header-text h1 { font-size: 1.4rem; letter-spacing: -0.5px; }
     .header-text span { font-size: 0.62rem; letter-spacing: 2px; }
+    .about { padding: 0 16px; }
     .products {
       grid-template-columns: repeat(2, minmax(0,1fr));
       grid-template-rows: auto;
+      padding: 4px 16px 0;
     }
     .tile-inner { height: auto; aspect-ratio: 1/1; }
     .contact { grid-template-columns: 1fr; gap: 10px; padding: 14px 18px; }
@@ -278,7 +310,6 @@
 
 <div class="page">
 
-  <!-- everything except bottom bar -->
   <div class="content">
 
     <!-- ================= HEADER (top center, bigger) ================= -->
@@ -302,56 +333,63 @@
     <!-- ================= PRODUCTS (7 + QR) ================= -->
     <div class="products">
 
-      <!-- 1 -->
+      <!-- 1 — DR System -->
       <div class="tile"><div class="tile-inner">
+        <span class="tile-badge">DR System</span>
         <div class="tile-media">
           <img src="images/3nc3.png" alt="PRORAD 3NC" onerror="this.style.display='none';">
         </div>
         <div class="tile-body"><h3>PRORAD 3NC</h3></div>
       </div></div>
 
-      <!-- 2 -->
+      <!-- 2 — DR System -->
       <div class="tile"><div class="tile-inner">
+        <span class="tile-badge">DR System</span>
         <div class="tile-media">
           <img src="images/2fc2.png" alt="PRORAD 2FC" onerror="this.style.display='none';">
         </div>
         <div class="tile-body"><h3>PRORAD 2FC</h3></div>
       </div></div>
 
-      <!-- 3 -->
+      <!-- 3 — DR System -->
       <div class="tile"><div class="tile-inner">
+        <span class="tile-badge">DR System</span>
         <div class="tile-media">
           <img src="images/2fc1.png" alt="PRORAD 2FC Single" onerror="this.style.display='none';">
         </div>
         <div class="tile-body"><h3>PRORAD 2FC Single</h3></div>
       </div></div>
 
-      <!-- 4 -->
+      <!-- 4 — Mobile DR -->
       <div class="tile"><div class="tile-inner">
+        <span class="tile-badge">Mobile DR</span>
         <div class="tile-media">
           <img src="images/mobiledr3.png" alt="PRORAD Atlas Mobile DR" onerror="this.style.display='none';">
         </div>
         <div class="tile-body"><h3>PRORAD Atlas Mobile DR</h3></div>
       </div></div>
 
-      <!-- 5 -->
+      <!-- 5 — Fluoroscopy -->
       <div class="tile"><div class="tile-inner">
+        <span class="tile-badge">Fluoroscopy</span>
         <div class="tile-media">
           <img src="images/carm1.png" alt="PRORAD Premium C-Arm" onerror="this.style.display='none';">
         </div>
         <div class="tile-body"><h3>PRORAD Premium C-Arm</h3></div>
       </div></div>
 
-      <!-- 6 -->
+      <!-- 6 — Ultraportable -->
       <div class="tile"><div class="tile-inner">
+        <span class="tile-badge">Ultraportable</span>
         <div class="tile-media">
           <img src="images/ultraportable4.png" alt="PRORAD Atlas Ultraportable" onerror="this.style.display='none';">
         </div>
         <div class="tile-body"><h3>PRORAD Atlas Ultraportable</h3></div>
       </div></div>
 
-      <!-- 7 -->
+      <!-- 7 — Detectors -->
       <div class="tile"><div class="tile-inner">
+        <span class="tile-badge">Detectors</span>
         <div class="tile-media">
           <img src="images/detector.png" alt="PRORAD Flat Panel Detectors" onerror="this.style.display='none';">
         </div>
@@ -360,6 +398,7 @@
 
       <!-- 8 — QR CODE TILE -->
       <div class="tile qr-tile"><div class="tile-inner">
+        <span class="tile-badge">Scan Me</span>
         <div class="tile-media">
           <img
             src="https://api.qrserver.com/v1/create-qr-code/?size=400x400&margin=0&data=https%3A%2F%2Fprognosysmedical.com%2F"
