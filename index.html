@@ -314,10 +314,13 @@
     }
     .history-bubble-wrap {
       background: #efeae2;
+      background-image: url('https://user-images.githubusercontent.com/15075759/28719144-86dc0f70-73b1-11e7-911d-60d70fcded21.png');
       border-radius: 0 0 12px 12px;
       padding: 15px;
       border: 1px solid var(--border);
       border-top: none;
+      display: flex;
+      justify-content: center;
     }
 
     /* Toast */
@@ -346,6 +349,51 @@
     /* Loading Spinner */
     .spinner { animation: spin 1s linear infinite; }
     @keyframes spin { 100% { transform: rotate(360deg); } }
+
+    /* ===== BROADCAST ANIMATION OVERLAY ===== */
+    .broadcast-overlay {
+      position: fixed; inset: 0;
+      background: rgba(13, 17, 28, 0.95);
+      backdrop-filter: blur(10px);
+      z-index: 9999;
+      display: flex; flex-direction: column; align-items: center; justify-content: center;
+      opacity: 0; visibility: hidden; transition: 0.3s;
+    }
+    .broadcast-overlay.active { opacity: 1; visibility: visible; }
+
+    .flying-animation {
+      font-size: 4rem; color: var(--accent);
+      margin-bottom: 2rem; position: relative;
+      animation: flyRight 1.5s infinite ease-in-out;
+    }
+    @keyframes flyRight {
+      0% { transform: translateX(-80px) rotate(-15deg) scale(0.8); opacity: 0; }
+      20% { transform: translateX(0) rotate(0deg) scale(1); opacity: 1; }
+      80% { transform: translateX(80px) rotate(15deg) scale(1.1); opacity: 1; }
+      100% { transform: translateX(120px) rotate(20deg) scale(0.8); opacity: 0; }
+    }
+
+    .progress-percent {
+      font-size: 3rem; color: var(--accent); font-weight: 800;
+      margin-bottom: 10px; text-shadow: 0 0 20px rgba(52, 211, 153, 0.3);
+      font-variant-numeric: tabular-nums;
+    }
+    .progress-container {
+      width: 80%; max-width: 500px; height: 14px;
+      background: rgba(255,255,255,0.1); border-radius: 10px;
+      overflow: hidden; margin-bottom: 1rem; position: relative;
+      box-shadow: inset 0 2px 4px rgba(0,0,0,0.5);
+    }
+    .progress-bar {
+      height: 100%; width: 0%;
+      background: linear-gradient(90deg, #34d399, #25D366);
+      border-radius: 10px; transition: width 0.3s ease;
+      box-shadow: 0 0 15px rgba(52, 211, 153, 0.5);
+    }
+    .progress-text {
+      font-size: 1.1rem; font-weight: 600; color: var(--text);
+      letter-spacing: 1px; text-align: center;
+    }
   </style>
 </head>
 <body>
@@ -493,6 +541,19 @@ NEAR GUJAR KI THADI, JAIPUR, 302019
     </div>
   </div>
 
+  <!-- FULL SCREEN BROADCAST OVERLAY -->
+  <div class="broadcast-overlay" id="broadcastOverlay">
+    <div class="flying-animation">
+      <i class="fas fa-paper-plane"></i>
+    </div>
+    <div class="progress-percent" id="progressPercent">0%</div>
+    <h2 style="color: white; margin-bottom: 20px; font-weight: 500; font-size: 1.2rem;">Broadcasting Message...</h2>
+    <div class="progress-container">
+      <div class="progress-bar" id="progressBar"></div>
+    </div>
+    <div class="progress-text" id="progressText">Sending to 0 / 0 contacts</div>
+  </div>
+
   <div class="toast" id="toast"><i class="fas fa-check-circle"></i> <span id="toastMsg">Success</span></div>
 
   <script>
@@ -524,7 +585,11 @@ NEAR GUJAR KI THADI, JAIPUR, 302019
       contactCount: document.getElementById('contactCount'),
       previewImage: document.getElementById('previewImage'),
       previewText: document.getElementById('previewText'),
-      previewTime: document.getElementById('previewTime')
+      previewTime: document.getElementById('previewTime'),
+      broadcastOverlay: document.getElementById('broadcastOverlay'),
+      progressBar: document.getElementById('progressBar'),
+      progressText: document.getElementById('progressText'),
+      progressPercent: document.getElementById('progressPercent')
     };
 
     // --- Utilities ---
@@ -537,6 +602,7 @@ NEAR GUJAR KI THADI, JAIPUR, 302019
     function closeModal(id) {
       document.getElementById(id).classList.remove('active');
       if (id === 'settingsModal') {
+        // Lock settings immediately on close
         document.getElementById('settingsPassword').value = '';
         document.getElementById('authSection').style.display = 'block';
         document.getElementById('configSection').style.display = 'none';
@@ -549,6 +615,11 @@ NEAR GUJAR KI THADI, JAIPUR, 302019
       let h = d.getHours(); let m = d.getMinutes();
       h = h < 10 ? '0' + h : h; m = m < 10 ? '0' + m : m;
       return `${h}:${m}`;
+    }
+
+    function getFullDateTime() {
+      const d = new Date();
+      return d.toLocaleDateString('en-IN', { day: '2-digit', month: 'short', year: 'numeric' }) + ' at ' + formatTime();
     }
 
     // --- Initialization ---
@@ -580,7 +651,15 @@ NEAR GUJAR KI THADI, JAIPUR, 302019
       // Settings
       document.getElementById('settingsBtn').onclick = () => DOM.settingsModal.classList.add('active');
       document.getElementById('historyBtn').onclick = () => { openHistory(); DOM.historyModal.classList.add('active'); };
+      
+      // Unlock via button or Enter key
       document.getElementById('unlockSettingsBtn').onclick = checkPassword;
+      document.getElementById('settingsPassword').addEventListener('keydown', (e) => {
+        if (e.key === 'Enter') {
+          e.preventDefault();
+          checkPassword();
+        }
+      });
       
       // Modals click-outside to close
       DOM.settingsModal.addEventListener('click', (e) => { if (e.target === DOM.settingsModal) closeModal('settingsModal'); });
@@ -856,7 +935,7 @@ NEAR GUJAR KI THADI, JAIPUR, 302019
       }
     }
 
-    // --- Broadcast Execution ---
+    // --- Broadcast Execution with Animation ---
     async function sendBroadcast() {
       const msgText = document.getElementById('messageText').value.trim();
       const btn = document.getElementById('sendBtn');
@@ -868,13 +947,14 @@ NEAR GUJAR KI THADI, JAIPUR, 302019
 
       if (!confirm(`Are you sure you want to send this broadcast to ${state.contacts.length} contacts?`)) return;
 
-      btn.disabled = true;
-      btn.innerHTML = '<i class="fas fa-spinner spinner"></i> Uploading Media...';
+      // Show Full Screen Overlay
+      DOM.broadcastOverlay.classList.add('active');
+      DOM.progressBar.style.width = '0%';
+      DOM.progressPercent.innerText = '0%';
+      DOM.progressText.innerText = `Sending to 0 / ${state.contacts.length} contacts`;
 
       try {
         const mediaId = await uploadImageToMeta(state.currentImage, state.config.waToken, state.config.waPhoneId);
-        
-        btn.innerHTML = `<i class="fas fa-spinner spinner"></i> Sending to ${state.contacts.length}...`;
         
         let success = 0;
         let fail = 0;
@@ -888,27 +968,39 @@ NEAR GUJAR KI THADI, JAIPUR, 302019
             console.error('Failed to send to', contact, e);
             fail++;
           }
+          
+          // Update Progress
+          const current = i + 1;
+          const percent = Math.round((current / state.contacts.length) * 100);
+          DOM.progressBar.style.width = percent + '%';
+          DOM.progressPercent.innerText = percent + '%';
+          DOM.progressText.innerText = `Sending to ${current} / ${state.contacts.length} contacts`;
+
+          // Slight delay for API limits & smooth animation
           await new Promise(r => setTimeout(r, 300));
-          btn.innerHTML = `<i class="fas fa-spinner spinner"></i> Sending: ${i+1}/${state.contacts.length}`;
         }
 
-        btn.innerHTML = '<i class="fas fa-spinner spinner"></i> Sending Telegram Copy...';
+        // Send Telegram copy
+        DOM.progressText.innerText = `Sending Telegram Copy...`;
         await sendTelegramCopy(msgText, state.currentImageBase64, state.config);
 
-        // Save History with Image
+        // Save History
         saveHistory(msgText, state.currentImageBase64, state.contacts.length, success, fail);
 
-        showToast(`Broadcast complete! Success: ${success}, Failed: ${fail}`);
-        
-        document.getElementById('messageText').value = '';
-        document.getElementById('previewText').innerHTML = '';
-        
+        // Hide Overlay after short delay
+        setTimeout(() => {
+          DOM.broadcastOverlay.classList.remove('active');
+          showToast(`Broadcast complete! Success: ${success}, Failed: ${fail}`);
+          
+          // Reset inputs
+          document.getElementById('messageText').value = '';
+          document.getElementById('previewText').innerHTML = '';
+        }, 800);
+
       } catch (error) {
         console.error(error);
+        DOM.broadcastOverlay.classList.remove('active');
         showToast(`Error: ${error.message}`, true);
-      } finally {
-        btn.disabled = false;
-        btn.innerHTML = '<i class="fas fa-paper-plane"></i> Send Broadcast';
       }
     }
 
@@ -916,7 +1008,8 @@ NEAR GUJAR KI THADI, JAIPUR, 302019
     function saveHistory(text, imageBase64, total, success, fail) {
       let history = JSON.parse(localStorage.getItem(STORAGE_KEYS.HISTORY)) || [];
       history.unshift({
-        date: new Date().toLocaleString(),
+        date: getFullDateTime(),
+        time: formatTime(),
         text: text,
         image: imageBase64,
         total: total,
@@ -924,13 +1017,11 @@ NEAR GUJAR KI THADI, JAIPUR, 302019
         fail: fail
       });
       
-      // Keep last 15 items to avoid LocalStorage limits
       history = history.slice(0, 15);
       
       try {
           localStorage.setItem(STORAGE_KEYS.HISTORY, JSON.stringify(history));
       } catch(e) {
-          // If storage is full, drop older items
           history = history.slice(0, 5);
           try { localStorage.setItem(STORAGE_KEYS.HISTORY, JSON.stringify(history)); } catch(e2) {}
       }
@@ -948,12 +1039,12 @@ NEAR GUJAR KI THADI, JAIPUR, 302019
       list.innerHTML = history.map(h => `
         <div class="history-item">
           <div class="history-meta">
-            <span>${h.date}</span>
+            <span><i class="fas fa-calendar-alt"></i> ${h.date}</span>
             <span style="color:var(--accent); font-weight:bold;">✅ ${h.success} / ${h.total}</span>
           </div>
           <div class="history-bubble-wrap">
-            <div class="wa-bubble" style="margin:0; width:100%; max-width:100%;">
-              ${h.image ? `<img src="${h.image}" class="wa-image" style="max-height:200px;">` : ''}
+            <div class="wa-bubble" style="margin:0;">
+              ${h.image ? `<img src="${h.image}" class="wa-image" style="max-height:180px;">` : ''}
               <div class="wa-content">
                 <div style="font-weight:600; margin-bottom:8px; color:#000;">*MYRTILLE INDUSTRIES*</div>
                 <div style="white-space:pre-wrap; margin-bottom:12px; color:#000;">${h.text}</div>
@@ -962,6 +1053,10 @@ NEAR GUJAR KI THADI, JAIPUR, 302019
                   MOBILE NO.- 9782099489<br>
                   <b>ADDRESS</b>- PLOT-25, DEEPNAGAR, <br>
                   NEAR GUJAR KI THADI, JAIPUR, 302019
+                </div>
+                <div class="wa-footer" style="margin-top: 10px;">
+                  <span>MADE WITH LOVE BY SANDEEP</span>
+                  <span>${h.time}</span>
                 </div>
               </div>
             </div>
